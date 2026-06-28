@@ -59,10 +59,10 @@ Good evening! Welcome to the Convenience Store.
 # character: nagger-1
 As you walk in, you are offered to join the Savers Club. # narration
 Join the Savers Club tonight, exclusive member rates.
-* [No thanks.] # fx: time=-30, standing=1
+* [No thanks. # fx: time=-30, standing=1]
     ~ nagsRefused = nagsRefused + 1
     -> membership_2
-* [Sign me up.] # fx: coins=-49, standing=-5 # flag: joinedClub=true
+* [Sign me up. # fx: coins=-49, standing=-5 # flag: joinedClub=true]
     ~ joinedClub = true
     -> bread
 
@@ -71,10 +71,10 @@ Join the Savers Club tonight, exclusive member rates.
 # character: nagger-2
 As you walk in, you are offered to join the Savers Club. # narration
 Sure you won't join? Members skip tonight's rain fee.
-* [I'm sure.] # fx: time=-30, standing=1
+* [I'm sure. # fx: time=-30, standing=1]
     ~ nagsRefused = nagsRefused + 1
     -> membership_3
-* [Okay.] # fx: coins=-49, standing=-5 # flag: joinedClub=true
+* [Okay. # fx: coins=-49, standing=-5 # flag: joinedClub=true]
     ~ joinedClub = true
     -> bread
 
@@ -83,10 +83,10 @@ Sure you won't join? Members skip tonight's rain fee.
 # character: nagger-3
 As you walk in, you are offered to join the Savers Club. # narration
 Last chance. Your mum's unwell, isn't she? One tap.
-* [No. Final answer.] # fx: time=-60, standing=2
+* [No. Final answer. # fx: time=-60, standing=2]
     ~ nagsRefused = nagsRefused + 1
     -> bread
-* [Just sign me up.] # fx: coins=-49, standing=-7 # flag: joinedClub=true
+* [Just sign me up. # fx: coins=-49, standing=-7 # flag: joinedClub=true]
     ~ joinedClub = true
     -> bread
 
@@ -95,15 +95,15 @@ Last chance. Your mum's unwell, isn't she? One tap.
 # character: bread-clerk
 Sponsored artisan loaves wall the eye-level shelf. The ₹40 bread sits below, half-hidden behind a cardboard mascot. # narration
 Artisan Sourdough, ₹95. Baked fresh daily.
-* [Take the artisan loaf.] # fx: coins=-95, standing=-4 # flag: boughtBread=2
+* [Take the artisan loaf. # fx: coins=-95, standing=-4 # flag: boughtBread=2]
     ~ boughtBread = 2
     ~ subtotal = subtotal + 95
     -> maggi
-* [Crouch for the ₹40 bread.] # fx: coins=-40, time=-60, standing=2 # flag: boughtBread=1
+* [Crouch for the ₹40 bread. # fx: coins=-40, time=-60, standing=2 # flag: boughtBread=1]
     ~ boughtBread = 1
     ~ subtotal = subtotal + 40
     -> maggi
-* [Ask staff for cheaper bread.] # fx: time=-90, coins=-95, standing=-2 # flag: boughtBread=2
+* [Ask staff for cheaper bread. # fx: time=-90, coins=-95, standing=-2 # flag: boughtBread=2]
     ~ boughtBread = 2
     ~ subtotal = subtotal + 95
     -> maggi
@@ -113,15 +113,15 @@ Artisan Sourdough, ₹95. Baked fresh daily.
 # character: maggi-clerk
 A nearly empty shelf. A few Maggi packs remain. A clerk stands announcing that it is selling out fast. # narration
 Rainy night, everyone wants Maggi! Only a few left, going fast.
-* [Grab the 6-pack.] # fx: coins=-60, standing=-4 # flag: boughtMaggi=2
+* [Grab the 6-pack. # fx: coins=-60, standing=-4 # flag: boughtMaggi=2]
     ~ boughtMaggi = 2
     ~ subtotal = subtotal + 60
     -> rice
-* [Just one pack.] # fx: coins=-14, standing=2 # flag: boughtMaggi=1
+* [Just one pack. # fx: coins=-14, standing=2 # flag: boughtMaggi=1]
     ~ boughtMaggi = 1
     ~ subtotal = subtotal + 14
     -> rice
-* [Wait and count what's there.] # fx: time=-60, coins=-14, standing=1 # flag: boughtMaggi=1
+* [Wait and count what's there. # fx: time=-60, coins=-14, standing=1 # flag: boughtMaggi=1]
     ~ boughtMaggi = 1
     ~ subtotal = subtotal + 14
     -> rice
@@ -130,15 +130,15 @@ Rainy night, everyone wants Maggi! Only a few left, going fast.
 # bg: rice
 # character: bread-clerk
 The shelf is dominated by a 10kg Value Pack with a bright BEST VALUE sticker. The 1kg bag you actually need is tucked off to the side. # narration
-* [Take the 10kg Value Pack.] # fx: coins=-180, standing=-5 # flag: boughtRice=2
+* [Take the 10kg Value Pack. # fx: coins=-180, standing=-5 # flag: boughtRice=2]
     ~ boughtRice = 2
     ~ subtotal = subtotal + 180
     -> produce
-* [Take the 1kg bag.] # fx: coins=-45, standing=2 # flag: boughtRice=1
+* [Take the 1kg bag. # fx: coins=-45, standing=2 # flag: boughtRice=1]
     ~ boughtRice = 1
     ~ subtotal = subtotal + 45
     -> produce
-* [Do the per-kilo maths.] # fx: time=-60, coins=-180, standing=-1 # flag: boughtRice=2
+* [Do the per-kilo maths. # fx: time=-60, coins=-180, standing=-1 # flag: boughtRice=2]
     ~ boughtRice = 2
     ~ subtotal = subtotal + 180
     -> produce
@@ -148,11 +148,11 @@ The shelf is dominated by a 10kg Value Pack with a bright BEST VALUE sticker. Th
 # character: produce-clerk
 A clerk gestures at the brighter-lit Premium Immunity Apples. Same fruit, twice the price. # narration
 For someone who's unwell? You'll want the wellness picks.
-* [Take the regular apples.] # fx: coins=-70, standing=2 # flag: boughtApples=1
+* [Take the regular apples. # fx: coins=-70, standing=2 # flag: boughtApples=1]
     ~ boughtApples = 1
     ~ subtotal = subtotal + 70
     -> phone_buzz_1
-* [Take the premium apples.] # fx: coins=-140, standing=-6 # flag: boughtApples=2
+* [Take the premium apples. # fx: coins=-140, standing=-6 # flag: boughtApples=2]
     ~ boughtApples = 2
     ~ subtotal = subtotal + 140
     -> phone_buzz_1
@@ -170,17 +170,17 @@ Your phone buzzes. A message from home. # narration
 # character: sneaker
 You head to the medicine aisle to grab the vapour rub. A stockboy speed-walks past and drops in a Flu Bundle — flu medicine, a steam inhaler, a keychain inhaler, and a limited-edition teddy bear. # narration # flag: sneakedCare=true
 For your mum! Can't be too careful.
-* [Put the extras back and take just the vapour rub.] # fx: time=-90, coins=-85, standing=3 # flag: boughtVicks=1, sneakCompliance=0, sneakedCare=false
+* [Put the extras back and take just the vapour rub. # fx: time=-90, coins=-85, standing=3 # flag: boughtVicks=1, sneakCompliance=0, sneakedCare=false]
     ~ boughtVicks = 1
     ~ sneakCompliance = 0
     ~ subtotal = subtotal + 85
     -> eggs
-* [Keep the bundle.] # fx: coins=-175, standing=-5 # flag: boughtVicks=2, sneakCompliance=1
+* [Keep the bundle. # fx: coins=-175, standing=-5 # flag: boughtVicks=2, sneakCompliance=1]
     ~ boughtVicks = 2
     ~ sneakCompliance = 1
     ~ subtotal = subtotal + 175
     -> eggs
-* [Leave it all, no time to sort.] # fx: coins=-266, standing=-9 # flag: boughtVicks=2, sneakCompliance=2
+* [Leave it all, no time to sort. # fx: coins=-266, standing=-9 # flag: boughtVicks=2, sneakCompliance=2]
     ~ boughtVicks = 2
     ~ sneakCompliance = 2
     ~ subtotal = subtotal + 266
@@ -191,11 +191,11 @@ For your mum! Can't be too careful.
 # character: fellow-shopper
 The shopper beside you with a basket is handed the same tray for ₹30 less. Yours scans higher. # narration
 Your price is a little higher. Based on your profile and how often you shop here. Nothing personal.
-* [Say something.] # fx: time=-90, coins=-90, standing=2 # flag: boughtEggs=2
+* [Say something. # fx: time=-90, coins=-90, standing=2 # flag: boughtEggs=2]
     ~ boughtEggs = 2
     ~ subtotal = subtotal + 90
     -> crossroads
-* [Pay and move on.] # fx: coins=-90, standing=-7 # flag: boughtEggs=2
+* [Pay and move on. # fx: coins=-90, standing=-7 # flag: boughtEggs=2]
     ~ boughtEggs = 2
     ~ subtotal = subtotal + 90
     -> crossroads
@@ -205,10 +205,10 @@ Your price is a little higher. Based on your profile and how often you shop here
 # character: none
 # phone: please hurry
 A junction in the store. The Express checkout sits empty — but you pay for the privilege. Every other lane is packed and crawling. # narration
-* [Take the Express lane.] # fx: coins=-80, standing=-8 # flag: tookExpress=true
+* [Take the Express lane. # fx: coins=-80, standing=-8 # flag: tookExpress=true]
     ~ tookExpress = true
     -> gate
-* [Take the long way.] # fx: time=-120, standing=3
+* [Take the long way. # fx: time=-120, standing=3]
     -> gate
 
 === gate ===
@@ -221,15 +221,15 @@ A junction in the store. The Express checkout sits empty — but you pay for the
 ~ temp gap = minOrder - subtotal
 A turnstile before the registers. Your basket reads ₹{subtotal}. # narration
 Tonight's minimum order for free checkout is ₹{minOrder} — you're just ₹{gap} short. Pop a chocolate in or it's a ₹35 convenience charge.
-* [Pay the ₹35 fee.] # fx: coins=-35, standing=-2 # flag: paidGateFee=true
+* [Pay the ₹35 fee. # fx: coins=-35, standing=-2 # flag: paidGateFee=true]
     ~ paidGateFee = true
     -> register
-* [Add a chocolate (₹50) to clear the bar.] # fx: coins=-50, standing=-9 # flag: boughtChocolate=true, addedFiller=true
+* [Add a chocolate (₹50) to clear the bar. # fx: coins=-50, standing=-9 # flag: boughtChocolate=true, addedFiller=true]
     ~ boughtChocolate = true
     ~ addedFiller = true
     ~ subtotal = subtotal + 50
     -> register
-* [Ask for the manager.] # fx: time=-120, coins=-35, standing=-4 # flag: paidGateFee=true
+* [Ask for the manager. # fx: time=-120, coins=-35, standing=-4 # flag: paidGateFee=true]
     ~ paidGateFee = true
     -> register
 
@@ -238,10 +238,10 @@ Tonight's minimum order for free checkout is ₹{minOrder} — you're just ₹{g
 # character: cashier-2
 The cashier scans. The total climbs line by line as fees appear. # narration
 Subtotal. Handling fee. Small-basket fee. Rain surcharge. Peak-hour fee. Done.
-* [Just pay.] # fx: coins=-45, standing=-6 # flag: paidDripFees=true
+* [Just pay. # fx: coins=-45, standing=-6 # flag: paidDripFees=true]
     ~ paidDripFees = true
     -> guard
-* [Ask what the rain surcharge is.] # fx: time=-60, coins=-45, standing=-3 # flag: paidDripFees=true
+* [Ask what the rain surcharge is. # fx: time=-60, coins=-45, standing=-3 # flag: paidDripFees=true]
     ~ paidDripFees = true
     -> guard
 
