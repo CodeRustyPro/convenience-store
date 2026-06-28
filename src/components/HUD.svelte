@@ -64,6 +64,7 @@
 </script>
 
 <div class="hud">
+  <div class="game-title">the convenience store: a game</div>
   <div class="hud-left">
     <Tooltip label="Your mother's money." placement="bottom">
       <div class="pill" class:warn={state.coins < 50}
@@ -106,11 +107,24 @@
     position: absolute;
     inset: 0;
     pointer-events: none;
-    padding: 1.2rem 1.6rem;
+    padding: 1.9rem 1.7rem;
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     z-index: 100;
+  }
+  .game-title {
+    position: absolute;
+    top: 0.85rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Love Ya Like A Sister', cursive;
+    font-size: 0.82rem;
+    letter-spacing: 0.07em;
+    color: var(--grey-low);
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 101;
   }
   .hud-left {
     display: flex;
@@ -127,9 +141,9 @@
   }
   .pill {
     position: relative;
-    width: 150px;
-    height: 50px;
-    font-size: 1.15rem;
+    width: 168px;
+    height: 57px;
+    font-size: 1.28rem;
     background: transparent;
     border: none;
     cursor: default;
@@ -146,14 +160,14 @@
     gap: 0.5rem;
   }
   .icon {
-    width: 24px;
-    height: 24px;
+    width: 27px;
+    height: 27px;
     object-fit: contain;
   }
   .value {
     display: inline-block;
     font-variant-numeric: tabular-nums;
-    min-width: 56px;
+    min-width: 62px;
     text-align: left;
   }
   .pill.warn .value {

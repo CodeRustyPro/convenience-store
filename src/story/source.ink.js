@@ -180,10 +180,9 @@ For your mum! Can't be too careful.
     ~ sneakCompliance = 1
     ~ subtotal = subtotal + 175
     -> eggs
-* [Leave it all, no time to sort. # fx: coins=-266, standing=-9 # flag: boughtVicks=2, sneakCompliance=2]
+* [Leave it all, no time to sort. # fx: time=-60, standing=-9 # flag: boughtVicks=2, sneakCompliance=2]
     ~ boughtVicks = 2
     ~ sneakCompliance = 2
-    ~ subtotal = subtotal + 266
     -> eggs
 
 === eggs ===
@@ -252,13 +251,22 @@ Subtotal. Handling fee. Small-basket fee. Rain surcharge. Peak-hour fee. Done.
 # ending
 A security guard stands to the side, and asks you to show your receipt. # narration
 * [Show the receipt ]
+    -> guard_bill
+
+=== guard_bill ===
+# bg: exit
+# character: guard-1
+Looks like you got everything you needed. And maybe a few things you didn't need.
+He runs his eyes down your receipt. # narration
+* [Continue ]
     -> guard_meter
 
 === guard_meter ===
 # bg: exit
 # character: guard-1
-That little character up top, the one you watched drop the whole time? That's been a representation of your dignity as a customer through the whole game.
-Look at the character in your top right corner. # narration # event: relabelDignity
+See that little figure up in the corner of the screen? It's been there since you walked in, quietly keeping score.
+It's your dignity as a customer — and it slipped a little with every nudge, every upsell, every fee you didn't question.
+Watch the corner. # narration # event: relabelDignity
 * [Listen ]
     -> guard_final
 

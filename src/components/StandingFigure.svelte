@@ -64,6 +64,7 @@
     use:wavyBorder={{ radius: 60, fill: '#FFFFFF', stroke: '#151515', strokeWidth: 2.2, waviness: 3.2, baseFrequency: 0.022 }}
   >
     <div class="figure-content">
+      <div class="pct">{standing}%</div>
       {#key b}
         <img src={url} alt="" class="figure" />
       {/key}
@@ -76,8 +77,8 @@
 <style>
   .badge {
     position: relative;
-    width: 82px;
-    height: 82px;
+    width: 94px;
+    height: 94px;
     cursor: default;
     background: transparent;
     border: none;
@@ -97,12 +98,27 @@
     border-radius: 999px;
   }
   .figure {
-    height: 86%;
+    height: 80%;
     width: auto;
     object-fit: contain;
     object-position: bottom;
     animation: figIn 0.32s ease forwards;
     opacity: 0;
+  }
+  /* Live percentage, sitting in the white space above the figure's head. */
+  .pct {
+    position: absolute;
+    top: 14%;
+    left: 0;
+    right: 0;
+    text-align: center;
+    z-index: 5;
+    font-family: 'Love Ya Like A Sister', cursive;
+    font-size: 0.8rem;
+    line-height: 1;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+    pointer-events: none;
   }
   @keyframes figIn {
     from { opacity: 0; }
@@ -122,7 +138,7 @@
     mask-repeat: no-repeat;
     -webkit-mask-position: center bottom;
     mask-position: center bottom;
-    -webkit-mask-size: auto 86%;
-    mask-size: auto 86%;
+    -webkit-mask-size: auto 80%;
+    mask-size: auto 80%;
   }
 </style>
