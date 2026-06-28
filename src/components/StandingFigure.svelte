@@ -54,7 +54,8 @@
       {#key b}
         <img src={url} alt="" class="figure" />
       {/key}
-      <div class="flash" bind:this={flashEl}></div>
+      <!-- Red copy of the figure (image used as a mask), flashed on a drop. -->
+      <div class="flash" bind:this={flashEl} style="--fig:url({url})"></div>
     </div>
   </div>
 </Tooltip>
@@ -94,15 +95,21 @@
     from { opacity: 0; }
     to   { opacity: 1; }
   }
-  /* Red wash that flashes over the figure on a dignity drop. multiply keeps
-     the dark line-art while turning the figure's light areas red. */
+  /* Red copy of the figure: a red fill masked by the figure image, so only
+     the character (not the surrounding box) turns red on a dignity drop. */
   .flash {
     position: absolute;
     inset: 0;
     background: var(--accent-red);
-    mix-blend-mode: multiply;
-    border-radius: 999px;
     opacity: 0;
     pointer-events: none;
+    -webkit-mask-image: var(--fig);
+    mask-image: var(--fig);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center bottom;
+    mask-position: center bottom;
+    -webkit-mask-size: auto 86%;
+    mask-size: auto 86%;
   }
 </style>
