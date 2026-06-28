@@ -65,7 +65,7 @@
     font-family: 'Love Ya Like A Sister', cursive;
     font-weight: 700;
     font-size: 2.2rem;
-    color: var(--ink);
+    color: var(--accent-red);
     line-height: 1.1;
   }
   /* Same treatment as the title-screen PLAY button. */
@@ -93,6 +93,6 @@
     font-size: 1.2rem;
     line-height: 1.5;
     max-width: 640px;
-    text-align: left;
+    text-align: center;
   }
 </style>
