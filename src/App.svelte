@@ -11,6 +11,23 @@
   let screen = $state('title'); // 'title' | 'game'
   let initialised = $state(false);
 
+  // Responsive scale: on touch phones the stage is a fixed 1280x800 design
+  // box that we uniformly scale to fit the viewport (a pure zoom — desktop
+  // is untouched since the transform only applies in the phone media query).
+  let fit = $state(1);
+  $effect(() => {
+    const compute = () => {
+      fit = Math.min(window.innerWidth / 1280, window.innerHeight / 800);
+    };
+    compute();
+    window.addEventListener('resize', compute);
+    window.addEventListener('orientationchange', compute);
+    return () => {
+      window.removeEventListener('resize', compute);
+      window.removeEventListener('orientationchange', compute);
+    };
+  });
+
   let uiState = $state({ showReceipt: false, showFinal: false, dignityRelabel: false, phoneBuzz: 0 });
   ui.subscribe((u) => { uiState = u; });
 
@@ -38,7 +55,7 @@
   }
 </script>
 
-<div class="stage">
+<div class="stage" style="--fit:{fit}">
   {#if screen === 'title'}
     <div class="screen" out:fade={{ duration: 400 }}>
       <TitleScreen onstart={startGame} />
@@ -58,6 +75,15 @@
   <div class="paper-grain"></div>
 </div>
 
+<!-- Phone-portrait only: this game is composed for landscape. -->
+<div class="rotate-hint" aria-hidden="true">
+  <div class="rotate-card">
+    <div class="rotate-icon">⟳</div>
+    <div class="rotate-title">Please rotate your phone</div>
+    <div class="rotate-sub">This story is best played in landscape.</div>
+  </div>
+</div>
+
 <style>
   .stage {
     position: relative;
@@ -69,5 +95,52 @@
   .screen {
     position: absolute;
     inset: 0;
+  }
+
+  /* Rotate hint is hidden everywhere except portrait touch phones. */
+  .rotate-hint { display: none; }
+
+  /* ---- Touch phones only (desktop path above is left untouched) ---- */
+  @media (hover: none) and (pointer: coarse) {
+    /* Fixed 1280x800 design box, uniformly scaled to fit the viewport. */
+    .stage {
+      width: 1280px;
+      height: 800px;
+      transform: scale(var(--fit, 1));
+      transform-origin: center center;
+      flex: none;
+    }
+  }
+  @media (hover: none) and (pointer: coarse) and (orientation: portrait) {
+    /* Portrait is too narrow for a 16:10 stage — hide it, ask to rotate. */
+    .stage { display: none; }
+    .rotate-hint {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #FFFFFF;
+      padding: 2rem;
+    }
+    .rotate-card {
+      text-align: center;
+      color: var(--ink);
+      font-family: 'Love Ya Like A Sister', cursive;
+      max-width: 18rem;
+    }
+    .rotate-icon {
+      font-size: 3.4rem;
+      line-height: 1;
+      margin-bottom: 1rem;
+      animation: rotate-nudge 1.8s ease-in-out infinite;
+    }
+    .rotate-title { font-size: 1.6rem; margin-bottom: 0.5rem; }
+    .rotate-sub { font-size: 1.1rem; color: var(--grey-mid); line-height: 1.4; }
+  }
+  @keyframes rotate-nudge {
+    0%, 100% { transform: rotate(0deg); }
+    50%      { transform: rotate(90deg); }
   }
 </style>
