@@ -1,0 +1,97 @@
+<script>
+  // Final hold screen — white like the landing page, closing reflection.
+  import { game, formatTime } from '../stores/game.js';
+  import { wavyBorder } from '../actions/wavyBorder.js';
+  import { fade, fly } from 'svelte/transition';
+
+  let { onRestart } = $props();
+  let g = $state({ coins: 0, standing: 0, timeSeconds: 0 });
+  game.subscribe((s) => { g = s; });
+</script>
+
+<div class="final" in:fade={{ duration: 600 }}>
+  <div class="content">
+    <div class="stats" in:fly={{ y: 12, duration: 600, delay: 300 }}>
+      <div class="stat"><div class="lbl">final dignity</div><div class="val">{g.standing}%</div></div>
+      <div class="stat"><div class="lbl">coins left</div><div class="val">₹{g.coins}</div></div>
+      <div class="stat"><div class="lbl">time left</div><div class="val">{formatTime(g.timeSeconds)}</div></div>
+    </div>
+
+    <button class="play"
+            use:wavyBorder={{ radius: 26, fill: '#FFFFFF', stroke: '#151515', strokeWidth: 2.4, waviness: 3.6, baseFrequency: 0.020 }}
+            onclick={onRestart}
+            in:fly={{ y: 16, duration: 600, delay: 700 }}>
+      <span class="play-label">SHOP AGAIN?</span>
+    </button>
+
+    <div class="footnote" in:fade={{ duration: 800, delay: 1500 }}>
+      This store isn't real. But the choices you made are. You've probably made them dozens of times without noticing. That's because quick commerce platforms like Blinkit, Instamart, and Zepto rarely ask for everything at once. They spread these compromises across ordinary moments, until they stop feeling like compromises at all. Convenience never asks for everything at once. It asks for one reasonable compromise at a time, until you no longer notice what you're giving up.
+    </div>
+  </div>
+</div>
+
+<style>
+  .final {
+    position: absolute;
+    inset: 0;
+    z-index: 600;
+    overflow: hidden;
+    background: #FFFFFF;
+  }
+  .content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.8rem;
+    color: var(--ink);
+    text-align: center;
+    padding: 2rem;
+  }
+  .stats {
+    display: flex;
+    gap: 2.2rem;
+  }
+  .stat .lbl {
+    font-family: 'Love Ya Like A Sister', cursive;
+    font-size: 1rem;
+    letter-spacing: 0.16em;
+    color: var(--ink);
+    text-transform: uppercase;
+  }
+  .stat .val {
+    font-family: 'Love Ya Like A Sister', cursive;
+    font-weight: 700;
+    font-size: 2.2rem;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+  /* Same treatment as the title-screen PLAY button. */
+  .play {
+    position: relative;
+    padding: 0.95rem 2.8rem;
+    font-size: 1.6rem;
+    font-family: 'Love Ya Like A Sister', cursive;
+    color: var(--ink);
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    filter: drop-shadow(-1.2px 4.9px 3.5px rgba(0, 0, 0, 0.18));
+    transition: transform 0.15s ease, filter 0.15s ease;
+  }
+  .play-label {
+    position: relative;
+    z-index: 2;
+  }
+  .play:hover { transform: translateY(-2px); filter: drop-shadow(-1.2px 6px 4px rgba(0, 0, 0, 0.22)); }
+  .play:active { transform: translateY(0); }
+  .footnote {
+    font-family: 'Love Ya Like A Sister', cursive;
+    color: var(--ink);
+    font-size: 1.2rem;
+    line-height: 1.5;
+    max-width: 640px;
+  }
+</style>

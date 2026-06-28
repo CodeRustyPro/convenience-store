@@ -1,0 +1,15 @@
+# dependencies
+node_modules
+
+# build output
+dist
+.vite
+convenience-store-dist.zip
+
+# local tooling / editor
+.DS_Store
+.claude
+
+# dev-only assets & reference (not used by the build)
+GI Game Build Assets/
+Convenience_Store-2.html
