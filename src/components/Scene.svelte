@@ -42,7 +42,7 @@
   <!-- Speech bubble at character's head/shoulder level, tail pointing at them -->
   {#if dialogueText}
     {#key `${frame.sceneId}-bubble`}
-      <div class="bubble-slot" class:no-character={!hasCharacter} in:fade={{ duration: 320, delay: 250 }}>
+      <div class="bubble-slot" class:no-character={!hasCharacter} class:mom={frame.character?.startsWith('mom')} in:fade={{ duration: 320, delay: 250 }}>
         <SpeechBubble text={dialogueText} tail={hasCharacter ? 'left' : 'none'} />
       </div>
     {/key}
@@ -101,6 +101,13 @@
     max-width: 270px;
     z-index: 40;
     pointer-events: none;
+  }
+  /* Mom is a wide square asset — her original placement was already perfect. */
+  .bubble-slot.mom {
+    left: 29%;
+    top: 32%;
+    width: 22%;
+    max-width: 260px;
   }
   .bubble-slot.no-character {
     left: 8%;
