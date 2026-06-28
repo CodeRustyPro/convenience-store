@@ -7,7 +7,7 @@
   import { game } from '../stores/game.js';
   import { story, ui } from '../story/storyEngine.js';
   import { fade, fly } from 'svelte/transition';
-  import { roughBorder } from '../actions/roughBorder.js';
+  import { wavyBorder } from '../actions/wavyBorder.js';
 
   let { onContinue } = $props();
 
@@ -153,8 +153,10 @@
       The receipt has the rest.
     </p>
 
-    <button class="rough cont" use:roughBorder={{ radius: 22, fill: '#FFFFFF', roughness: 1.5, strokeWidth: 1.8 }} onclick={onContinue}>
-      <span class="rough-content">step outside →</span>
+    <button class="cont"
+            use:wavyBorder={{ radius: 24, fill: '#FFFFFF', stroke: '#151515', strokeWidth: 2.4, waviness: 3.6, baseFrequency: 0.020 }}
+            onclick={onContinue}>
+      <span class="cont-label">step outside →</span>
     </button>
   </div>
 </div>
@@ -257,13 +259,20 @@
     line-height: 1.5;
   }
   .cont {
+    position: relative;
     display: block;
     margin: 0 auto;
-    padding: 0.6rem 1.6rem;
+    padding: 0.7rem 1.9rem;
+    font-family: 'Love Ya Like A Sister', cursive;
     font-size: 1.1rem;
     color: var(--ink);
     cursor: pointer;
-    transition: transform 0.12s ease;
+    background: transparent;
+    border: none;
+    filter: drop-shadow(-1.2px 4.9px 3.5px rgba(0, 0, 0, 0.18));
+    transition: transform 0.15s ease, filter 0.15s ease;
   }
-  .cont:hover { transform: translateY(-2px); }
+  .cont-label { position: relative; z-index: 2; }
+  .cont:hover { transform: translateY(-2px); filter: drop-shadow(-1.2px 6px 4px rgba(0, 0, 0, 0.22)); }
+  .cont:active { transform: translateY(0); }
 </style>

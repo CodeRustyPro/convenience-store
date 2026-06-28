@@ -11,7 +11,11 @@
 
 <div class="final" in:fade={{ duration: 600 }}>
   <div class="content">
-    <div class="stats" in:fly={{ y: 12, duration: 600, delay: 300 }}>
+    <div class="footnote" in:fade={{ duration: 800, delay: 300 }}>
+      This store isn't real. But the choices you made are. You've probably made them dozens of times without noticing. That's because quick commerce platforms like Blinkit, Instamart, and Zepto rarely ask for everything at once. They spread these compromises across ordinary moments, until they stop feeling like compromises at all. Convenience never asks for everything at once. It asks for one reasonable compromise at a time, until you no longer notice what you're giving up.
+    </div>
+
+    <div class="stats" in:fly={{ y: 12, duration: 600, delay: 900 }}>
       <div class="stat"><div class="lbl">final dignity</div><div class="val">{g.standing}%</div></div>
       <div class="stat"><div class="lbl">coins left</div><div class="val">₹{g.coins}</div></div>
       <div class="stat"><div class="lbl">time left</div><div class="val">{formatTime(g.timeSeconds)}</div></div>
@@ -20,13 +24,9 @@
     <button class="play"
             use:wavyBorder={{ radius: 26, fill: '#FFFFFF', stroke: '#151515', strokeWidth: 2.4, waviness: 3.6, baseFrequency: 0.020 }}
             onclick={onRestart}
-            in:fly={{ y: 16, duration: 600, delay: 700 }}>
+            in:fly={{ y: 16, duration: 600, delay: 1300 }}>
       <span class="play-label">SHOP AGAIN?</span>
     </button>
-
-    <div class="footnote" in:fade={{ duration: 800, delay: 1500 }}>
-      This store isn't real. But the choices you made are. You've probably made them dozens of times without noticing. That's because quick commerce platforms like Blinkit, Instamart, and Zepto rarely ask for everything at once. They spread these compromises across ordinary moments, until they stop feeling like compromises at all. Convenience never asks for everything at once. It asks for one reasonable compromise at a time, until you no longer notice what you're giving up.
-    </div>
   </div>
 </div>
 
@@ -93,5 +93,6 @@
     font-size: 1.2rem;
     line-height: 1.5;
     max-width: 640px;
+    text-align: left;
   }
 </style>

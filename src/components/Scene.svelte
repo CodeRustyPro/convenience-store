@@ -94,11 +94,11 @@
   /* Speech bubble: at the character's head/shoulder height, hugging their right */
   .bubble-slot {
     position: absolute;
-    left: 29%;
-    top: 32%;
-    width: 22%;
+    left: 22%;
+    top: 30%;
+    width: 23%;
     min-width: 200px;
-    max-width: 260px;
+    max-width: 270px;
     z-index: 40;
     pointer-events: none;
   }

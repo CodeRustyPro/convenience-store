@@ -96,22 +96,18 @@
     display: inline-flex;
     align-items: center;
     gap: 0.22rem;
-    font-size: 0.82rem;
-    border-radius: 999px;
-    padding: 0.05rem 0.5rem 0.1rem;
+    font-size: 0.9rem;
     line-height: 1.2;
     white-space: nowrap;
     font-variant-numeric: tabular-nums;
-    border: 1px solid;
+    color: var(--ink-soft);
   }
   .chip-icon {
-    width: 13px;
-    height: 13px;
+    width: 14px;
+    height: 14px;
     object-fit: contain;
     flex: 0 0 auto;
   }
-  .chip.coin { color: var(--accent-red); border-color: var(--accent-red); }
-  .chip.time { color: #5a8acb;          border-color: #5a8acb; }
   .choice:hover:not(:disabled) {
     transform: translateY(-2px) rotate(-0.25deg);
     filter: drop-shadow(-1.2px 6px 4px rgba(0, 0, 0, 0.28)) brightness(1.02);
