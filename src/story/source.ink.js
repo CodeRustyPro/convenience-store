@@ -146,7 +146,7 @@ The shelf is dominated by a 10kg Value Pack with a bright BEST VALUE sticker. Th
 === produce ===
 # bg: produce
 # character: produce-clerk
-A clerk gestures at the brighter-lit Premium Immunity Apples. Same fruit, twice the price. # narration
+A clerk gestures at the brighter-lit Premium Immunity Apples. # narration
 For someone who's unwell? You'll want the wellness picks.
 * [Take the regular apples. # fx: coins=-70, standing=2 # flag: boughtApples=1]
     ~ boughtApples = 1

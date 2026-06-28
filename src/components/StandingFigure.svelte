@@ -20,16 +20,26 @@
   const tooltipText = $derived(`${standing}%`);
 
   let badgeEl;
-  let prev = 100;
+  let flashEl;
+  // Track the RAW standing value (not just the bucket) so every drop is
+  // signalled, even small ones that don't change the sprite.
+  let prevStanding = 100;
   $effect(() => {
-    if (badgeEl && b !== prev) {
-      if (b < prev) {
+    if (badgeEl && standing !== prevStanding) {
+      if (standing < prevStanding) {
         gsap.fromTo(badgeEl,
           { rotate: -3, scale: 1.06 },
           { rotate: 0, scale: 1, duration: 0.5, ease: 'elastic.out(1, 0.45)' }
         );
+        // Flash the figure red so the change is unmistakable.
+        if (flashEl) {
+          gsap.fromTo(flashEl,
+            { opacity: 0 },
+            { opacity: 0.6, duration: 0.14, yoyo: true, repeat: 1, ease: 'power1.inOut' }
+          );
+        }
       }
-      prev = b;
+      prevStanding = standing;
     }
   });
 </script>
@@ -44,6 +54,7 @@
       {#key b}
         <img src={url} alt="" class="figure" />
       {/key}
+      <div class="flash" bind:this={flashEl}></div>
     </div>
   </div>
 </Tooltip>
@@ -82,5 +93,16 @@
   @keyframes figIn {
     from { opacity: 0; }
     to   { opacity: 1; }
+  }
+  /* Red wash that flashes over the figure on a dignity drop. multiply keeps
+     the dark line-art while turning the figure's light areas red. */
+  .flash {
+    position: absolute;
+    inset: 0;
+    background: var(--accent-red);
+    mix-blend-mode: multiply;
+    border-radius: 999px;
+    opacity: 0;
+    pointer-events: none;
   }
 </style>
