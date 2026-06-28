@@ -21,6 +21,11 @@
 
   let badgeEl;
   let flashEl;
+  const INK = '#151515';
+  const RED = '#c63838';
+  // How long the character + border stay red on a drop.
+  const HOLD = 1.1;
+
   // Track the RAW standing value (not just the bucket) so every drop is
   // signalled, even small ones that don't change the sprite.
   let prevStanding = 100;
@@ -31,12 +36,20 @@
           { rotate: -3, scale: 1.06 },
           { rotate: 0, scale: 1, duration: 0.5, ease: 'elastic.out(1, 0.45)' }
         );
-        // Flash the figure red so the change is unmistakable.
+        // Hold the character red for a clearly noticeable beat.
         if (flashEl) {
-          gsap.fromTo(flashEl,
-            { opacity: 0 },
-            { opacity: 0.6, duration: 0.14, yoyo: true, repeat: 1, ease: 'power1.inOut' }
-          );
+          gsap.timeline()
+            .fromTo(flashEl, { opacity: 0 }, { opacity: 0.85, duration: 0.14, ease: 'power1.out' })
+            .to(flashEl, { opacity: 0.85, duration: HOLD })
+            .to(flashEl, { opacity: 0, duration: 0.35, ease: 'power1.in' });
+        }
+        // Turn the badge border red on the same schedule.
+        const rect = badgeEl.querySelector('svg.wavy-border rect');
+        if (rect) {
+          gsap.timeline()
+            .to(rect, { attr: { stroke: RED }, duration: 0.14, ease: 'power1.out' })
+            .to(rect, { attr: { stroke: RED }, duration: HOLD })
+            .to(rect, { attr: { stroke: INK }, duration: 0.35, ease: 'power1.in' });
         }
       }
       prevStanding = standing;
