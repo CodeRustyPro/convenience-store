@@ -255,7 +255,7 @@ A security guard stands to the side, and asks you to show your receipt. # narrat
 
 === guard_bill ===
 # bg: exit
-# character: guard-1
+# character: guard-2
 Looks like you got everything you needed. And maybe a few things you didn't need.
 He runs his eyes down your receipt. # narration
 * [Continue ]
