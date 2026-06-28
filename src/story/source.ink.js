@@ -180,9 +180,9 @@ For your mum! Can't be too careful.
     ~ sneakCompliance = 1
     ~ subtotal = subtotal + 175
     -> eggs
-* [Leave it all, no time to sort. # fx: time=-60, standing=-9 # flag: boughtVicks=2, sneakCompliance=2]
-    ~ boughtVicks = 2
-    ~ sneakCompliance = 2
+* [Leave it all, no time to sort. # fx: time=-60, standing=-9 # flag: boughtVicks=0, sneakCompliance=0, sneakedCare=false]
+    ~ boughtVicks = 0
+    ~ sneakCompliance = 0
     -> eggs
 
 === eggs ===
