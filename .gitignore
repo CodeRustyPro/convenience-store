@@ -10,6 +10,11 @@ convenience-store-dist.zip
 .DS_Store
 .claude
 
+# local env (analytics endpoint + token) — .env.example is committed
+.env
+.env.local
+.env.*.local
+
 # dev-only assets & reference (not used by the build)
 GI Game Build Assets/
 Convenience_Store-2.html

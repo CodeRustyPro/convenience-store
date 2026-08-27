@@ -5,6 +5,7 @@
 import { writable, get } from 'svelte/store';
 import { Compiler } from 'inkjs/full';
 import { game } from '../stores/game.js';
+import { analytics } from '../analytics/analytics.js';
 import { STORY_INK } from './source.ink.js';
 
 const frame = writable({
@@ -76,6 +77,33 @@ function parseTag(raw) {
   return { type: 'unknown', payload: t };
 }
 
+// Ink knot the player is standing in, for analytics. A choice's sourcePath
+// looks like "bread.0.21", so the first segment is the knot name.
+function knotOf(choice) {
+  const path = choice?.sourcePath || '';
+  return path.split('.')[0] || 'unknown';
+}
+
+// Snapshot of the story's VARs, for the end-of-run summary row.
+const TRACKED_VARS = [
+  'joinedClub', 'sneakCompliance', 'boughtBread', 'boughtMaggi', 'boughtRice',
+  'boughtApples', 'boughtVicks', 'boughtEggs', 'boughtChocolate', 'tookExpress',
+  'paidGateFee', 'addedFiller', 'paidDripFees', 'subtotal', 'nagsRefused',
+];
+
+function inkVariables() {
+  const out = {};
+  if (!inkStory) return out;
+  for (const name of TRACKED_VARS) {
+    try { out[name] = inkStory.variablesState.$(name); } catch {}
+  }
+  return out;
+}
+
+// Lets the analytics module describe a run that was abandoned mid-shop with
+// the same detail as a completed one.
+analytics.provideSnapshot(() => ({ state: get(game), vars: inkVariables() }));
+
 function fireEvent(name) {
   switch (name) {
     case 'relabelDignity':
@@ -122,7 +150,10 @@ function advance() {
         case 'event':      events.push(tag.payload); fireEvent(tag.payload); break;
         case 'noClock':    game.pause(); break;
         case 'startClock': game.resume(); game.startClock(); break;
-        case 'final':      ui.update((u) => ({ ...u, showFinal: true })); break;
+        case 'final':
+          ui.update((u) => ({ ...u, showFinal: true }));
+          analytics.endRun(get(game), inkVariables());
+          break;
         case 'unknown':
           // bare tags without a colon (e.g. 'narration')
           if (tag.payload === 'narration') lineKind = 'narration';
@@ -165,17 +196,33 @@ function advance() {
   // Buzz AFTER the frame is committed so PhoneNotification reads the
   // fresh phone text via story.current() (not the previous frame's).
   if (phone) ui.update((u) => ({ ...u, phoneBuzz: u.phoneBuzz + 1 }));
+
+  // Start the deliberation clock for the choices now on screen.
+  analytics.markFrame();
 }
 
 function chooseIndex(i) {
   if (!inkStory) return;
   const choice = inkStory.currentChoices[i];
   const tags = choice?.tags || [];
+  const before = get(game);
+  let effects = null;
   for (const raw of tags) {
     const tag = parseTag(raw);
-    if (tag.type === 'fx')   game.applyEffects(tag.payload);
+    if (tag.type === 'fx')   { effects = { ...(effects || {}), ...tag.payload }; game.applyEffects(tag.payload); }
     if (tag.type === 'flag') for (const f of tag.payload) game.setFlag(f.key, f.value);
   }
+
+  analytics.choice({
+    scene: knotOf(choice),
+    choiceIndex: i,
+    choiceLabel: choice?.text ?? '',
+    optionCount: inkStory.currentChoices.length,
+    effects: effects || {},
+    before,
+    after: get(game),
+  });
+
   inkStory.ChooseChoiceIndex(i);
   advance();
 }
@@ -186,6 +233,7 @@ export const story = {
   async init() {
     const compiler = new Compiler(STORY_INK);
     inkStory = compiler.Compile();
+    analytics.startRun();
     advance();
   },
   choose: chooseIndex,
@@ -198,6 +246,7 @@ export const story = {
     game.reset();
     ui.set({ showReceipt: false, showFinal: false, phoneBuzz: 0, dignityRelabel: false });
     if (inkStory) inkStory.ResetState();
+    analytics.startRun();   // a replay is a separate run, same browser id
     advance();
   },
 };

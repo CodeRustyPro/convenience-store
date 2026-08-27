@@ -21,6 +21,13 @@ npm run preview  # preview the production build
 - **inkjs** — narrative engine (`src/story/source.ink.js`)
 - **GSAP**, **Rough.js** — hand-drawn UI / animation
 
+## Playtest logging
+
+Every choice and every finished run can be appended to a Google Sheet
+(downloadable as Excel) so you can see what people actually pick. Off unless
+`VITE_ANALYTICS_URL` is set — setup and the list of columns are in
+[`analytics/README.md`](analytics/README.md).
+
 ## Deploy
 
 The site is fully static. It auto-deploys to **Vercel** on every push to `main`
