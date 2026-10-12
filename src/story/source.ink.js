@@ -16,6 +16,10 @@
 // loses the points of every dimension the player fell for; resisting loses
 // nothing. Scene totals: club 13, bread 10, maggi 9, rice 8, apples 10,
 // vicks 11, eggs 9, crossroads 8, gate 14, register 8.
+//
+// dg_<scene> flags record which mechanisms a choice lost points to
+// (D = Deception, P = Persuasion, O = Optimisation) for the receipt's
+// "How the store got to you" counts. No flag = nothing lost in that scene.
 
 export const STORY_INK = `
 VAR joinedClub       = false
@@ -71,7 +75,7 @@ Join the Savers Club tonight, exclusive member rates.
 * [No thanks. # fx: time=-30]
     ~ nagsRefused = nagsRefused + 1
     -> membership_2
-* [Sign me up. # fx: coins=-49, standing=-13 # flag: joinedClub=true]
+* [Sign me up. # fx: coins=-49, standing=-13 # flag: joinedClub=true, dg_club=DPO]
     ~ joinedClub = true
     -> bread
 
@@ -83,7 +87,7 @@ Sure you won't join? Members skip tonight's rain fee.
 * [I'm sure. # fx: time=-30]
     ~ nagsRefused = nagsRefused + 1
     -> membership_3
-* [Okay. # fx: coins=-49, standing=-13 # flag: joinedClub=true]
+* [Okay. # fx: coins=-49, standing=-13 # flag: joinedClub=true, dg_club=DPO]
     ~ joinedClub = true
     -> bread
 
@@ -95,7 +99,7 @@ Last chance. Your mum's unwell, isn't she? One tap.
 * [No. Final answer. # fx: time=-60]
     ~ nagsRefused = nagsRefused + 1
     -> bread
-* [Just sign me up. # fx: coins=-49, standing=-13 # flag: joinedClub=true]
+* [Just sign me up. # fx: coins=-49, standing=-13 # flag: joinedClub=true, dg_club=DPO]
     ~ joinedClub = true
     -> bread
 
@@ -104,7 +108,7 @@ Last chance. Your mum's unwell, isn't she? One tap.
 # character: bread-clerk
 Sponsored artisan loaves wall the eye-level shelf. The ₹40 bread sits below, half-hidden behind a cardboard mascot. # narration
 Artisan Sourdough, ₹95. Baked fresh daily.
-* [Take the artisan loaf. # fx: coins=-95, standing=-10 # flag: boughtBread=2]
+* [Take the artisan loaf. # fx: coins=-95, standing=-10 # flag: boughtBread=2, dg_bread=DPO]
     ~ boughtBread = 2
     ~ subtotal = subtotal + 95
     -> maggi
@@ -112,7 +116,7 @@ Artisan Sourdough, ₹95. Baked fresh daily.
     ~ boughtBread = 1
     ~ subtotal = subtotal + 40
     -> maggi
-* [Ask staff for cheaper bread. # fx: time=-90, coins=-95, standing=-8 # flag: boughtBread=2]
+* [Ask staff for cheaper bread. # fx: time=-90, coins=-95, standing=-8 # flag: boughtBread=2, dg_bread=DPO]
     ~ boughtBread = 2
     ~ subtotal = subtotal + 95
     -> maggi
@@ -122,7 +126,7 @@ Artisan Sourdough, ₹95. Baked fresh daily.
 # character: maggi-clerk
 A nearly empty shelf. A few Maggi packs remain. A clerk stands announcing that it is selling out fast. # narration
 Rainy night, everyone wants Maggi! Only a few left, going fast.
-* [Grab the 6-pack. # fx: coins=-60, standing=-9 # flag: boughtMaggi=2]
+* [Grab the 6-pack. # fx: coins=-60, standing=-9 # flag: boughtMaggi=2, dg_maggi=DPO]
     ~ boughtMaggi = 2
     ~ subtotal = subtotal + 60
     -> rice
@@ -139,7 +143,7 @@ Rainy night, everyone wants Maggi! Only a few left, going fast.
 # bg: rice
 # character: bread-clerk
 The shelf is dominated by a 10kg Value Pack with a bright BEST VALUE sticker. The 1kg bag you actually need is tucked off to the side. # narration
-* [Take the 10kg Value Pack. # fx: coins=-180, standing=-8 # flag: boughtRice=2]
+* [Take the 10kg Value Pack. # fx: coins=-180, standing=-8 # flag: boughtRice=2, dg_rice=DO]
     ~ boughtRice = 2
     ~ subtotal = subtotal + 180
     -> produce
@@ -147,7 +151,7 @@ The shelf is dominated by a 10kg Value Pack with a bright BEST VALUE sticker. Th
     ~ boughtRice = 1
     ~ subtotal = subtotal + 45
     -> produce
-* [Do the per-kilo maths. # fx: time=-60, coins=-180, standing=-6 # flag: boughtRice=2]
+* [Do the per-kilo maths. # fx: time=-60, coins=-180, standing=-6 # flag: boughtRice=2, dg_rice=O]
     ~ boughtRice = 2
     ~ subtotal = subtotal + 180
     -> produce
@@ -161,7 +165,7 @@ For someone who's unwell? You'll want the wellness picks.
     ~ boughtApples = 1
     ~ subtotal = subtotal + 70
     -> phone_buzz_1
-* [Take the premium apples. # fx: coins=-140, standing=-10 # flag: boughtApples=2]
+* [Take the premium apples. # fx: coins=-140, standing=-10 # flag: boughtApples=2, dg_apples=DPO]
     ~ boughtApples = 2
     ~ subtotal = subtotal + 140
     -> phone_buzz_1
@@ -184,12 +188,12 @@ For your mum! Can't be too careful.
     ~ sneakCompliance = 0
     ~ subtotal = subtotal + 85
     -> eggs
-* [Keep the bundle. # fx: coins=-175, standing=-11 # flag: boughtVicks=2, sneakCompliance=1]
+* [Keep the bundle. # fx: coins=-175, standing=-11 # flag: boughtVicks=2, sneakCompliance=1, dg_vicks=DPO]
     ~ boughtVicks = 2
     ~ sneakCompliance = 1
     ~ subtotal = subtotal + 175
     -> eggs
-* [Leave it all, no time to sort. # fx: time=-60, standing=-3 # flag: boughtVicks=0, sneakCompliance=0, sneakedCare=false]
+* [Leave it all, no time to sort. # fx: time=-60, standing=-3 # flag: boughtVicks=0, sneakCompliance=0, sneakedCare=false, dg_vicks=P]
     ~ boughtVicks = 0
     ~ sneakCompliance = 0
     -> eggs
@@ -199,11 +203,11 @@ For your mum! Can't be too careful.
 # character: fellow-shopper
 The shopper beside you with a basket is handed the same tray for ₹30 less. Yours scans higher. # narration
 Your price is a little higher. Based on your profile and how often you shop here. Nothing personal.
-* [Say something. # fx: time=-90, coins=-90, standing=-5 # flag: boughtEggs=2]
+* [Say something. # fx: time=-90, coins=-90, standing=-5 # flag: boughtEggs=2, dg_eggs=DO]
     ~ boughtEggs = 2
     ~ subtotal = subtotal + 90
     -> crossroads
-* [Pay and move on. # fx: coins=-90, standing=-9 # flag: boughtEggs=2]
+* [Pay and move on. # fx: coins=-90, standing=-9 # flag: boughtEggs=2, dg_eggs=DPO]
     ~ boughtEggs = 2
     ~ subtotal = subtotal + 90
     -> crossroads
@@ -213,7 +217,7 @@ Your price is a little higher. Based on your profile and how often you shop here
 # character: none
 # phone: please hurry
 A junction in the store. The Express checkout sits empty — but you pay for the privilege. Every other lane is packed and crawling. # narration
-* [Take the Express lane. # fx: coins=-80, standing=-8 # flag: tookExpress=true]
+* [Take the Express lane. # fx: coins=-80, standing=-8 # flag: tookExpress=true, dg_crossroads=PO]
     ~ tookExpress = true
     -> gate
 * [Take the long way. # fx: time=-120]
@@ -229,15 +233,15 @@ A junction in the store. The Express checkout sits empty — but you pay for the
 ~ temp gap = minOrder - subtotal
 A turnstile before the registers. Your basket reads ₹{subtotal}. # narration
 Tonight's minimum order for free checkout is ₹{minOrder} — you're just ₹{gap} short. Pop a chocolate in or it's a ₹35 convenience charge.
-* [Pay the ₹35 fee. # fx: coins=-35, standing=-10 # flag: paidGateFee=true]
+* [Pay the ₹35 fee. # fx: coins=-35, standing=-10 # flag: paidGateFee=true, dg_gate=DPO]
     ~ paidGateFee = true
     -> register
-* [Add a chocolate (₹50) to clear the bar. # fx: coins=-50, standing=-14 # flag: boughtChocolate=true, addedFiller=true]
+* [Add a chocolate (₹50) to clear the bar. # fx: coins=-50, standing=-14 # flag: boughtChocolate=true, addedFiller=true, dg_gate=DPO]
     ~ boughtChocolate = true
     ~ addedFiller = true
     ~ subtotal = subtotal + 50
     -> register
-* [Ask for the manager. # fx: time=-120, coins=-35, standing=-8 # flag: paidGateFee=true]
+* [Ask for the manager. # fx: time=-120, coins=-35, standing=-8 # flag: paidGateFee=true, dg_gate=DPO]
     ~ paidGateFee = true
     -> register
 
@@ -246,10 +250,10 @@ Tonight's minimum order for free checkout is ₹{minOrder} — you're just ₹{g
 # character: cashier-2
 The cashier scans. The total climbs line by line as fees appear. # narration
 Subtotal. Handling fee. Small-basket fee. Rain surcharge. Peak-hour fee. Done.
-* [Just pay. # fx: coins=-45, standing=-8 # flag: paidDripFees=true]
+* [Just pay. # fx: coins=-45, standing=-8 # flag: paidDripFees=true, dg_register=D]
     ~ paidDripFees = true
     -> guard
-* [Ask what the rain surcharge is. # fx: time=-60, coins=-45, standing=-6 # flag: paidDripFees=true]
+* [Ask what the rain surcharge is. # fx: time=-60, coins=-45, standing=-6 # flag: paidDripFees=true, dg_register=D]
     ~ paidDripFees = true
     -> guard
 
