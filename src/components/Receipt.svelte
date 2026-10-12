@@ -2,7 +2,7 @@
   // Final receipt — computed from Ink variables + game store.
   // Section 1: HER LIST (items actually bought)
   // Section 2: WHAT THE STORE ADDED (fees, upsells, sneaks, membership, dynamic price)
-  // Section 3: WHAT YOU LEFT BEHIND (qualitative counts)
+  // Section 3: HOW THE STORE GOT TO YOU (dark-pattern mechanisms that worked)
 
   import { game } from '../stores/game.js';
   import { story, ui } from '../story/storyEngine.js';
@@ -58,27 +58,30 @@
     snap.boughtRice  === 2 && { name: '9 kg of rice, because "best value"',         price: 135 },
     snap.boughtApples=== 2 && { name: 'Apples upgraded to "wellness picks"',        price: 70 },
     snap.sneakCompliance === 1 && { name: 'A protection bundle you didn\'t choose', price: 90 },
-    snap.sneakCompliance === 2 && { name: 'Everything in the basket, unchecked',    price: 181 },
-    snap.tookExpress     && { name: 'Two items the Express lane added',             price: 80 },
+    snap.tookExpress     && { name: 'Paying to skip the queue',                     price: 80, note: '(the Express lane)' },
     snap.boughtChocolate && { name: 'A chocolate, to clear the minimum-order bar',  price: 50 },
     snap.paidGateFee     && { name: 'A "convenience" fee at the gate',              price: 35 },
     snap.paidDripFees    && { name: 'Fees that appeared at the last second',        price: 45 },
-    snap.boughtEggs  > 0 && { name: 'The "you" price on a tray of eggs',            price: 30, note: '(the man beside you paid less)' },
+    snap.boughtEggs  > 0 && { name: 'The "you" price on a tray of eggs',            price: 30, note: '(the shopper beside you paid less)' },
   ].filter(Boolean));
 
-  // ---------- Section 3: WHAT YOU LEFT BEHIND ----------
-  // All derived from the player's actual choices so the tally is honest.
-  // Times a membership "No" cost time/standing instead of taking the "Yes".
-  const naggerStands = $derived(snap.nagsRefused);
-  // Items that ended up in the basket without being picked: kept sneak-ins
-  // (bundle = 1, leave-it-all = 3) plus the two the Express lane slips in.
-  const sneakedItems = $derived(
-    (snap.sneakCompliance === 2 ? 3 : snap.sneakCompliance === 1 ? 1 : 0)
-    + (snap.tookExpress ? 2 : 0)
-  );
-  // Minutes elapsed from the 15-minute medication window.
-  const START_SECONDS = 15 * 60;
-  const minutesTraded = $derived(Math.max(0, Math.floor((START_SECONDS - g.timeSeconds) / 60)));
+  // ---------- Section 3: HOW THE STORE GOT TO YOU ----------
+  // Each losing choice sets a dg_<scene> flag listing the mechanisms it lost
+  // dignity to (D/P/O). A scene counts once per mechanism. "Tries" is how
+  // many scenes use that mechanism at all (see the scoring note in
+  // source.ink.js).
+  const MECHANISMS = [
+    { key: 'D', label: "Times you didn't see the trick",               tries: 9 },
+    { key: 'P', label: 'Times you gave in to pressure',                 tries: 8 },
+    { key: 'O', label: 'Times "the smart choice" won you over',         tries: 9 },
+  ];
+  const hits = $derived(Object.entries(g.flags || {})
+    .filter(([k, v]) => k.startsWith('dg_') && typeof v === 'string')
+    .map(([, v]) => v));
+  const compromised = $derived(MECHANISMS.map((m) => ({
+    ...m,
+    count: hits.filter((v) => v.includes(m.key)).length,
+  })));
 
   const subtotal = $derived(list.reduce((s, x) => s + x.price, 0));
   const extrasTotal = $derived(extras.reduce((s, x) => s + x.price, 0));
@@ -137,13 +140,15 @@
     <div class="rule">— · — · — · — · — · — · — · — · —</div>
 
     <section>
-      <h3>WHAT YOU LEFT BEHIND</h3>
-      <ul class="rows quiet">
-        <li><span class="name">Times "No" cost more than "Yes"</span><span class="dots"></span><span class="price">{naggerStands}</span></li>
-        <li><span class="name">Items added without being asked</span><span class="dots"></span><span class="price">{sneakedItems}</span></li>
-        <li><span class="name">Minutes traded for convenience</span><span class="dots"></span><span class="price">{minutesTraded}</span></li>
-        <li class="big"><span class="name">Dignity remaining</span><span class="dots"></span><span class="price">{g.standing}%</span></li>
+      <h3>HOW THE STORE GOT TO YOU</h3>
+      <ul class="rows">
+        {#each compromised as m}
+          <li><span class="name">{m.label}</span><span class="dots"></span><span class="price">{m.count} of {m.tries}</span></li>
+        {/each}
       </ul>
+      <div class="line-total big">
+        <span>Dignity remaining</span><span>{g.standing}%</span>
+      </div>
     </section>
 
     <div class="rule">— · — · — · — · — · — · — · — · —</div>
@@ -228,7 +233,8 @@
     font-size: 1.05rem;
   }
   .rows li.empty { color: var(--grey-low); font-style: italic; }
-  .rows .name { flex-shrink: 0; }
+  /* Long names (with a note) wrap instead of running past the paper edge. */
+  .rows .name { flex: 0 1 auto; min-width: 0; }
   .note { color: var(--grey-low); margin-left: 0.4em; font-size: 0.85em; }
   .rows .dots {
     flex-grow: 1;
@@ -238,8 +244,6 @@
     min-width: 24px;
   }
   .rows .price { flex-shrink: 0; font-variant-numeric: tabular-nums; }
-  .rows.quiet { color: var(--grey-mid); }
-  .rows li.big { font-size: 1.2rem; color: var(--ink); margin-top: 0.4rem; }
 
   .line-total {
     display: flex;
@@ -250,6 +254,8 @@
     font-size: 1rem;
     color: var(--grey-mid);
   }
+
+  .line-total.big { font-size: 1.2rem; color: var(--ink); }
 
   .closing {
     text-align: center;

@@ -4,6 +4,7 @@
 //
 // Usage:
 //   <div class="bubble" use:wavyBorder={{ radius: 22, strokeWidth: 2.4 }}>
+//   radius: 'pill' rounds the ends completely (half the box height).
 
 const NS = 'http://www.w3.org/2000/svg';
 
@@ -63,8 +64,10 @@ export function wavyBorder(node, options = {}) {
       rectEl.setAttribute('y', inset);
       rectEl.setAttribute('width', Math.max(1, w - inset * 2));
       rectEl.setAttribute('height', Math.max(1, h - inset * 2));
-      rectEl.setAttribute('rx', opts.radius);
-      rectEl.setAttribute('ry', opts.radius);
+      const innerH = Math.max(1, h - inset * 2);
+      const r = opts.radius === 'pill' ? innerH / 2 : opts.radius;
+      rectEl.setAttribute('rx', r);
+      rectEl.setAttribute('ry', r);
       rectEl.setAttribute('fill', opts.fill);
       rectEl.setAttribute('stroke', opts.stroke);
       rectEl.setAttribute('stroke-width', opts.strokeWidth);

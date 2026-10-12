@@ -3,12 +3,12 @@
   let { label, style = 'default', effects = null, onclick } = $props();
 
   const styleConfig = $derived({
-    default:  { radius: 18, strokeWidth: 2.4, fill: '#FFFFFF',     waviness: 3.4, baseFrequency: 0.022 },
-    tiny:     { radius: 12, strokeWidth: 1.6, fill: 'transparent', waviness: 2.4, baseFrequency: 0.030 },
-    huge:     { radius: 22, strokeWidth: 2.8, fill: '#ffe9a3',     waviness: 4.0, baseFrequency: 0.018 },
-    dim:      { radius: 18, strokeWidth: 1.6, fill: 'transparent', waviness: 2.6, baseFrequency: 0.024 },
-    disabled: { radius: 18, strokeWidth: 1.6, fill: '#eeeeee',     waviness: 2.4, baseFrequency: 0.024 },
-  }[style] || { radius: 18, strokeWidth: 2.4, fill: '#FFFFFF', waviness: 3.4, baseFrequency: 0.022 });
+    default:  { radius: 'pill', strokeWidth: 2.4, fill: '#FFFFFF',     waviness: 3.4, baseFrequency: 0.022 },
+    tiny:     { radius: 'pill', strokeWidth: 1.6, fill: 'transparent', waviness: 2.4, baseFrequency: 0.030 },
+    huge:     { radius: 'pill', strokeWidth: 2.8, fill: '#ffe9a3',     waviness: 4.0, baseFrequency: 0.018 },
+    dim:      { radius: 'pill', strokeWidth: 1.6, fill: 'transparent', waviness: 2.6, baseFrequency: 0.024 },
+    disabled: { radius: 'pill', strokeWidth: 1.6, fill: '#eeeeee',     waviness: 2.4, baseFrequency: 0.024 },
+  }[style] || { radius: 'pill', strokeWidth: 2.4, fill: '#FFFFFF', waviness: 3.4, baseFrequency: 0.022 });
 
   const coinDelta = $derived(effects && typeof effects.coins === 'number' ? effects.coins : 0);
   const timeDelta = $derived(effects && typeof effects.time === 'number'  ? effects.time  : 0);
@@ -75,7 +75,7 @@
     z-index: 2;
     width: 100%;
     min-height: 52px;
-    padding: 0.55rem 0.9rem 0.55rem 1.2rem;
+    padding: 0.55rem 1.4rem 0.55rem 1.6rem;
     display: grid;
     grid-template-columns: 1fr auto;
     align-items: center;
