@@ -37,6 +37,17 @@
   const HOVER = ['var(--accent-red)', 'var(--accent-blue)', 'var(--accent-green)'];
 
   const pct = (v, total) => `${(v / total) * 100}%`;
+
+  // Slow drift: each item bobs and tilts on its own long cycle so the
+  // shelves feel alive without ever moving in step. Derived from the index
+  // so it's the same on every visit.
+  const drift = (i) => {
+    const dur = 7 + ((i * 37) % 50) / 10;          // 7s – 12s
+    const delay = -((i * 53) % 90) / 10;           // start mid-cycle
+    const dy = 4 + (i % 3) * 2;                    // 4 – 8px
+    const rot = (i % 2 ? 1 : -1) * (0.8 + (i % 4) * 0.4); // ±0.8° – 2°
+    return `--drift-dur:${dur}s; --drift-delay:${delay}s; --dy:${dy}px; --rot:${rot}deg`;
+  };
 </script>
 
 <div class="title-screen">
@@ -46,7 +57,7 @@
         class="item"
         style="left:{pct(it.x, FRAME_W)}; top:{pct(it.y, FRAME_H)}; width:{pct(it.w, FRAME_W)};
                aspect-ratio:{it.w} / {it.h}; --src:url('/assets/landing/{it.name}.png');
-               --hover:{HOVER[i % HOVER.length]}; animation-delay:{0.25 + i * 0.04}s"
+               --hover:{HOVER[i % HOVER.length]}; --in-delay:{0.25 + i * 0.04}s; {drift(i)}"
       ></div>
     {/each}
   </div>
@@ -85,8 +96,17 @@
     -webkit-mask: var(--src) center / contain no-repeat;
             mask: var(--src) center / contain no-repeat;
     opacity: 0;
-    animation: itemIn 0.6s ease forwards;
+    animation:
+      itemIn 0.6s ease var(--in-delay) forwards,
+      drift var(--drift-dur) ease-in-out var(--drift-delay) infinite alternate;
     transition: background-color 0.3s ease, filter 0.3s ease;
+  }
+  @keyframes drift {
+    from { transform: translateY(0) rotate(0deg); }
+    to   { transform: translateY(calc(var(--dy) * -1)) rotate(var(--rot)); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .item { animation: itemIn 0.6s ease var(--in-delay) forwards; }
   }
   .item:hover {
     background-color: var(--hover);
@@ -95,8 +115,8 @@
   /* The drawings sit faint (50%) like the Figma frame, and full strength in
      colour on hover. */
   @keyframes itemIn {
-    from { opacity: 0; transform: translateY(6px); }
-    to   { opacity: 0.5; transform: translateY(0); }
+    from { opacity: 0; }
+    to   { opacity: 0.5; }
   }
   .item:hover { opacity: 1 !important; }
 
