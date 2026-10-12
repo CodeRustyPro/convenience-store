@@ -2,11 +2,13 @@
   import { wavyBorder } from '../actions/wavyBorder.js';
   let { onstart } = $props();
 
-  // Grocery line art around the title, placed as in the Figma landing frame
-  // (1920 x 1080, node 297:10). x / y / w / h are in that frame's pixels and
-  // converted to % of the stage below, so the layout scales with the screen.
+  // The page is built on the Figma landing frame itself (1920 x 1080, node
+  // 297:10): everything below is in that frame's pixels and is scaled as one,
+  // so proportions match the design. At 16:9 it is the Figma frame exactly;
+  // on other shapes the left and right columns stay pinned to their screen
+  // edges and the title stays centred, so nothing gets cropped.
   // Each PNG is an alpha mask of the drawing, so its colour is set in CSS:
-  // faint ink at rest, a palette colour on hover.
+  // faint ink until hovered, then a palette colour that stays.
   const FRAME_W = 1920;
   const FRAME_H = 1080;
   const ITEMS = [
@@ -37,47 +39,79 @@
   // so neighbours on the same side never share a colour.
   const HOVER = ['#F0AF46', '#1B2A6B', '#E69CB7', '#93253B', '#4E75AC', '#5DAF5E'];
 
-  const pct = (v, total) => `${(v / total) * 100}%`;
+  // Index into HOVER for each item, or -1 while it's still uncoloured.
+  // Hovering colours an item and it keeps that colour; each new hover moves
+  // it on to the next colour in the list.
+  let colourOf = $state(ITEMS.map(() => -1));
+  function recolour(i) {
+    colourOf[i] = colourOf[i] < 0 ? i % HOVER.length : (colourOf[i] + 1) % HOVER.length;
+  }
 
-  // Slow drift: each item bobs and tilts on its own long cycle so the
-  // shelves feel alive without ever moving in step. Derived from the index
-  // so it's the same on every visit.
+  // Scale to the window height, but shrink further if the window is too
+  // narrow for both columns plus the title (1600 frame px).
+  const MIN_W = 1600;
+  let scale = $state(1);
+  let offY = $state(0);
+  $effect(() => {
+    const fit = () => {
+      scale = Math.min(window.innerHeight / FRAME_H, window.innerWidth / MIN_W);
+      offY = (window.innerHeight - FRAME_H * scale) / 2;
+    };
+    fit();
+    window.addEventListener('resize', fit);
+    return () => window.removeEventListener('resize', fit);
+  });
+
+  // Slow drift: each item floats, sways and tilts on its own cycle so the
+  // shelves feel alive without moving in step. Derived from the index so
+  // it's the same on every visit. Distances are in frame pixels.
+  const left = ITEMS.map((it, i) => ({ ...it, i })).filter((it) => it.x < FRAME_W / 2);
+  const right = ITEMS.map((it, i) => ({ ...it, i })).filter((it) => it.x >= FRAME_W / 2);
+
   const drift = (i) => {
-    const dur = 7 + ((i * 37) % 50) / 10;          // 7s – 12s
-    const delay = -((i * 53) % 90) / 10;           // start mid-cycle
-    const dy = 4 + (i % 3) * 2;                    // 4 – 8px
-    const rot = (i % 2 ? 1 : -1) * (0.8 + (i % 4) * 0.4); // ±0.8° – 2°
-    return `--drift-dur:${dur}s; --drift-delay:${delay}s; --dy:${dy}px; --rot:${rot}deg`;
+    const dur = 5 + ((i * 37) % 40) / 10;                 // 5s – 9s
+    const delay = -((i * 53) % 90) / 10;                  // start mid-cycle
+    const dy = 12 + (i % 3) * 5;                          // 12 – 22px
+    const dx = (i % 2 ? 1 : -1) * (4 + (i % 4) * 2);      // ±4 – 10px
+    const rot = (i % 2 ? -1 : 1) * (2 + (i % 4) * 0.8);   // ±2° – 4.4°
+    return `--drift-dur:${dur}s; --drift-delay:${delay}s; --dx:${dx}px; --dy:${dy}px; --rot:${rot}deg`;
   };
 </script>
 
-<div class="title-screen">
-  <div class="art" aria-hidden="true">
-    {#each ITEMS as it, i (it.name)}
-      <div
-        class="item"
-        style="left:{pct(it.x, FRAME_W)}; top:{pct(it.y, FRAME_H)}; width:{pct(it.w, FRAME_W)};
-               aspect-ratio:{it.w} / {it.h}; --src:url('/assets/landing/{it.name}.png');
-               --hover:{HOVER[i % HOVER.length]}; --in-delay:{0.25 + i * 0.04}s; {drift(i)}"
-      ></div>
-    {/each}
+{#snippet art(list, shift)}
+  {#each list as it (it.name)}
+    <div
+      class="item"
+      class:coloured={colourOf[it.i] >= 0}
+      onpointerenter={() => recolour(it.i)}
+      style="left:{it.x - shift}px; top:{it.y}px; width:{it.w}px; height:{it.h}px;
+             --src:url('/assets/landing/{it.name}.png');
+             --colour:{colourOf[it.i] >= 0 ? HOVER[colourOf[it.i]] : 'var(--ink)'}; --in-delay:{0.25 + it.i * 0.04}s; {drift(it.i)}"
+    ></div>
+  {/each}
+{/snippet}
+
+<div class="title-screen" style="--scale:{scale}; --off-y:{offY}px">
+  <div class="side left" aria-hidden="true">{@render art(left, 0)}</div>
+  <div class="side right" aria-hidden="true">{@render art(right, FRAME_W / 2)}</div>
+
+  <div class="center">
+    <h1 class="hero">
+      <span class="word" style="animation-delay: 0.05s">THE</span>
+      <span class="word" style="animation-delay: 0.20s">CONVENIENCE</span>
+      <span class="word" style="animation-delay: 0.40s">STORE</span>
+    </h1>
+
+    <button
+      class="play"
+      onclick={onstart}
+      use:wavyBorder={{ radius: 'pill', fill: '#FFFFFF', stroke: '#151515', strokeWidth: 2.4, waviness: 3.6, baseFrequency: 0.020 }}
+    >
+      <span class="play-label">PLAY  →</span>
+    </button>
+
+    <p class="credit">By Parisa Mehta and Srividhya S</p>
   </div>
-
-  <h1 class="hero">
-    <span class="word" style="animation-delay: 0.05s">THE</span>
-    <span class="word" style="animation-delay: 0.20s">CONVENIENCE</span>
-    <span class="word" style="animation-delay: 0.40s">STORE</span>
-  </h1>
-
-  <button
-    class="play"
-    onclick={onstart}
-    use:wavyBorder={{ radius: 'pill', fill: '#FFFFFF', stroke: '#151515', strokeWidth: 2.4, waviness: 3.6, baseFrequency: 0.020 }}
-  >
-    <span class="play-label">PLAY  →</span>
-  </button>
-
-  <p class="credit">By Parisa Mehta and Srividhya S</p>
 </div>
 
 <style>
@@ -86,11 +120,24 @@
     inset: 0;
     overflow: hidden;
     background: #FFFFFF;
-    /* Type is sized in cqw so it keeps the Figma proportions at any size. */
-    container-type: size;
   }
-
-  .art { position: absolute; inset: 0; }
+  /* Three layers in frame pixels, each scaled from the edge it's pinned to. */
+  .side, .center {
+    position: absolute;
+    top: var(--off-y, 0);
+    height: 1080px;
+  }
+  .side { width: 960px; }
+  .side.left  { left: 0;  transform-origin: 0 0;    transform: scale(var(--scale, 1)); }
+  .side.right { right: 0; transform-origin: 100% 0; transform: scale(var(--scale, 1)); }
+  .center {
+    left: 50%;
+    width: 1920px;
+    transform-origin: 50% 0;
+    transform: translateX(-50%) scale(var(--scale, 1));
+    pointer-events: none;
+  }
+  .center .play { pointer-events: auto; }
   .item {
     position: absolute;
     background-color: var(--ink);
@@ -103,15 +150,16 @@
     transition: background-color 0.3s ease, filter 0.3s ease;
   }
   @keyframes drift {
-    from { transform: translateY(0) rotate(0deg); }
-    to   { transform: translateY(calc(var(--dy) * -1)) rotate(var(--rot)); }
+    0%   { transform: translate(0, 0) rotate(0deg); }
+    50%  { transform: translate(var(--dx), calc(var(--dy) * -0.6)) rotate(calc(var(--rot) * 0.5)); }
+    100% { transform: translate(calc(var(--dx) * -0.5), calc(var(--dy) * -1)) rotate(var(--rot)); }
   }
   @media (prefers-reduced-motion: reduce) {
     .item { animation: itemIn 0.6s ease var(--in-delay) forwards; }
   }
-  .item:hover {
-    background-color: var(--hover);
-    filter: drop-shadow(0 0 0.5px var(--hover));
+  .item.coloured {
+    background-color: var(--colour);
+    filter: drop-shadow(0 0 0.5px var(--colour));
   }
   /* The drawings sit faint (50%) like the Figma frame, and full strength in
      colour on hover. */
@@ -119,18 +167,17 @@
     from { opacity: 0; }
     to   { opacity: 0.5; }
   }
-  .item:hover { opacity: 1 !important; }
+  .item.coloured { opacity: 1 !important; }
 
   .hero {
     position: absolute;
-    left: 50%;
-    top: 27.7%;
-    transform: translateX(-50%);
-    width: 46%;
+    left: 495px;
+    top: 299px;
+    width: 883px;
     margin: 0;
     font-family: 'Love Ya Like A Sister', cursive;
     font-weight: 400;
-    font-size: 7.34cqw;
+    font-size: 141px;
     line-height: 0.87;
     text-align: center;
     color: #000000;
@@ -146,10 +193,10 @@
   .play {
     position: absolute;
     left: 50%;
-    top: 72%;
+    top: 790px;
     transform: translateX(-50%);
-    padding: 0.85rem 2.8rem;
-    font-size: 1.5rem;
+    padding: 20px 64px;
+    font-size: 36px;
     font-family: 'Love Ya Like A Sister', cursive;
     color: var(--ink);
     cursor: pointer;
@@ -168,13 +215,13 @@
   .credit {
     position: absolute;
     left: 50%;
-    top: 94.9%;
+    top: 1025.5px;
     transform: translate(-50%, -50%);
     margin: 0;
-    width: 46%;
+    width: 881px;
     font-family: Helvetica, Arial, sans-serif;
-    font-size: 1.54cqw;
-    letter-spacing: -0.02em;
+    font-size: 29.55px;
+    letter-spacing: -0.591px;
     line-height: 1.32;
     text-align: center;
     color: #000000;
