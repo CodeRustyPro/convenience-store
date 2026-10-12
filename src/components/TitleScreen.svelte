@@ -33,8 +33,9 @@
     { name: 'taste-bag',   x: 137,  y: 812, w: 329, h: 268 },
   ];
 
-  // Hover colours, from the game's own palette (app.css / HUD).
-  const HOVER = ['var(--accent-red)', 'var(--accent-blue)', 'var(--accent-green)'];
+  // Hover colours, from the Figma "Colours" frame. Items take them in turn,
+  // so neighbours on the same side never share a colour.
+  const HOVER = ['#F0AF46', '#1B2A6B', '#E69CB7', '#93253B', '#4E75AC', '#5DAF5E'];
 
   const pct = (v, total) => `${(v / total) * 100}%`;
 
