@@ -8,7 +8,7 @@
   // on other shapes the left and right columns stay pinned to their screen
   // edges and the title stays centred, so nothing gets cropped.
   // Each PNG is an alpha mask of the drawing, so its colour is set in CSS:
-  // faint ink at rest, a palette colour on hover.
+  // faint ink until hovered, then a palette colour that stays.
   const FRAME_W = 1920;
   const FRAME_H = 1080;
   const ITEMS = [
@@ -38,6 +38,14 @@
   // Hover colours, from the Figma "Colours" frame. Items take them in turn,
   // so neighbours on the same side never share a colour.
   const HOVER = ['#F0AF46', '#1B2A6B', '#E69CB7', '#93253B', '#4E75AC', '#5DAF5E'];
+
+  // Index into HOVER for each item, or -1 while it's still uncoloured.
+  // Hovering colours an item and it keeps that colour; each new hover moves
+  // it on to the next colour in the list.
+  let colourOf = $state(ITEMS.map(() => -1));
+  function recolour(i) {
+    colourOf[i] = colourOf[i] < 0 ? i % HOVER.length : (colourOf[i] + 1) % HOVER.length;
+  }
 
   // Scale to the window height, but shrink further if the window is too
   // narrow for both columns plus the title (1600 frame px).
@@ -74,9 +82,11 @@
   {#each list as it (it.name)}
     <div
       class="item"
+      class:coloured={colourOf[it.i] >= 0}
+      onpointerenter={() => recolour(it.i)}
       style="left:{it.x - shift}px; top:{it.y}px; width:{it.w}px; height:{it.h}px;
              --src:url('/assets/landing/{it.name}.png');
-             --hover:{HOVER[it.i % HOVER.length]}; --in-delay:{0.25 + it.i * 0.04}s; {drift(it.i)}"
+             --colour:{colourOf[it.i] >= 0 ? HOVER[colourOf[it.i]] : 'var(--ink)'}; --in-delay:{0.25 + it.i * 0.04}s; {drift(it.i)}"
     ></div>
   {/each}
 {/snippet}
@@ -147,9 +157,9 @@
   @media (prefers-reduced-motion: reduce) {
     .item { animation: itemIn 0.6s ease var(--in-delay) forwards; }
   }
-  .item:hover {
-    background-color: var(--hover);
-    filter: drop-shadow(0 0 0.5px var(--hover));
+  .item.coloured {
+    background-color: var(--colour);
+    filter: drop-shadow(0 0 0.5px var(--colour));
   }
   /* The drawings sit faint (50%) like the Figma frame, and full strength in
      colour on hover. */
@@ -157,7 +167,7 @@
     from { opacity: 0; }
     to   { opacity: 0.5; }
   }
-  .item:hover { opacity: 1 !important; }
+  .item.coloured { opacity: 1 !important; }
 
   .hero {
     position: absolute;
