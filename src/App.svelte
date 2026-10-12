@@ -55,12 +55,16 @@
   }
 </script>
 
+<!-- The landing page is laid out on the Figma 16:9 frame, so it gets the
+     whole window instead of the game's 16:10 stage. -->
+{#if screen === 'title'}
+  <div class="landing" out:fade={{ duration: 400 }}>
+    <TitleScreen onstart={startGame} />
+  </div>
+{/if}
+
 <div class="stage" style="--fit:{fit}">
-  {#if screen === 'title'}
-    <div class="screen" out:fade={{ duration: 400 }}>
-      <TitleScreen onstart={startGame} />
-    </div>
-  {:else}
+  {#if screen === 'game'}
     <div class="screen" in:fade={{ duration: 500, delay: 200 }}>
       <Scene />
       <HUD />
@@ -95,6 +99,12 @@
   .screen {
     position: absolute;
     inset: 0;
+  }
+
+  .landing {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
   }
 
   /* Rotate hint is hidden everywhere except portrait touch phones. */
