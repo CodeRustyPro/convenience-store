@@ -53,16 +53,16 @@
   // ---------- Section 2: WHAT THE STORE ADDED ----------
   const extras = $derived([
     snap.joinedClub      && { name: 'A membership you didn\'t want',                price: 49 },
-    snap.boughtBread === 2 && { name: 'Bread at the eye-level price',               price: 55, note: '(vs the bottom shelf)' },
+    snap.boughtBread === 2 && { name: 'Bread at the eye-level price',               price: 55 },
     snap.boughtMaggi === 2 && { name: '5 extra Maggi packs you didn\'t need',       price: 46 },
     snap.boughtRice  === 2 && { name: '9 kg of rice, because "best value"',         price: 135 },
     snap.boughtApples=== 2 && { name: 'Apples upgraded to "wellness picks"',        price: 70 },
     snap.sneakCompliance === 1 && { name: 'A protection bundle you didn\'t choose', price: 90 },
-    snap.tookExpress     && { name: 'Paying to skip the queue',                     price: 80, note: '(the Express lane)' },
+    snap.tookExpress     && { name: 'Paying to skip the queue',                     price: 80 },
     snap.boughtChocolate && { name: 'A chocolate, to clear the minimum-order bar',  price: 50 },
     snap.paidGateFee     && { name: 'A "convenience" fee at the gate',              price: 35 },
     snap.paidDripFees    && { name: 'Fees that appeared at the last second',        price: 45 },
-    snap.boughtEggs  > 0 && { name: 'The "you" price on a tray of eggs',            price: 30, note: '(the shopper beside you paid less)' },
+    snap.boughtEggs  > 0 && { name: 'The "you" price on a tray of eggs',            price: 30 },
   ].filter(Boolean));
 
   // ---------- Section 3: HOW THE STORE GOT TO YOU ----------
@@ -123,7 +123,6 @@
           <li>
             <span class="name">
               {item.name}
-              {#if item.note}<span class="note">{item.note}</span>{/if}
             </span>
             <span class="dots"></span>
             <span class="price">+ ₹{item.price}</span>
@@ -233,9 +232,8 @@
     font-size: 1.05rem;
   }
   .rows li.empty { color: var(--grey-low); font-style: italic; }
-  /* Long names (with a note) wrap instead of running past the paper edge. */
+  /* Long names wrap instead of running past the paper edge. */
   .rows .name { flex: 0 1 auto; min-width: 0; }
-  .note { color: var(--grey-low); margin-left: 0.4em; font-size: 0.85em; }
   .rows .dots {
     flex-grow: 1;
     border-bottom: 1.5px dotted var(--grey-low);
