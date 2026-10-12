@@ -27,13 +27,10 @@
     { name: 'vaporub',     x: 1683, y: 872, w: 111, h: 113 },
     { name: 'pretzels',    x: 1750, y: 848, w: 170, h: 232 },
     { name: 'maggi',       x: 1512, y: 918, w: 201, h: 162 },
-    // Still to export from Figma (nodes 297:28, 297:30, 297:31, 297:32).
-    // Drop the PNG into public/assets/landing/ and uncomment; w / h are the
-    // size of the exported image.
-    // { name: 'cookies',     x: 1375, y: 0,   w: 346, h: 123 },
-    // { name: 'coffee',      x: 0,    y: 230, w: 131, h: 233 },
-    // { name: 'ok-can',      x: 1640, y: 123, w: 121, h: 146 },
-    // { name: 'taste-bag',   x: 137,  y: 812, w: 329, h: 268 },
+    { name: 'cookies',     x: 1375, y: 0,   w: 346, h: 123 },
+    { name: 'ok-can',      x: 1640, y: 123, w: 121, h: 147 },
+    { name: 'wafer-stix',  x: 0,    y: 230, w: 132, h: 233 },
+    { name: 'taste-bag',   x: 137,  y: 812, w: 329, h: 268 },
   ];
 
   // Hover colours, from the game's own palette (app.css / HUD).
