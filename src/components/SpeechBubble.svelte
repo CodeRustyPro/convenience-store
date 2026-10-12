@@ -1,10 +1,10 @@
 <script>
   import { wavyBorder } from '../actions/wavyBorder.js';
-  let { text = '', tail = 'left' } = $props();
+  let { text = '', tail = 'left', delay = 0 } = $props();
   const words = $derived(text.trim().split(/\s+/).filter(Boolean));
 </script>
 
-<div class="bubble-outer">
+<div class="bubble-outer" style="animation-delay: {delay}s">
   <div class="bubble" use:wavyBorder={{
     radius: 32,
     fill: '#FFFFFF',
@@ -15,7 +15,7 @@
   }}>
     <p class="text">
       {#each words as w, i (i)}
-        <span class="word" style="animation-delay: {i * 0.035}s">{w}</span>
+        <span class="word" style="animation-delay: {delay + i * 0.035}s">{w}</span>
       {/each}
     </p>
   </div>

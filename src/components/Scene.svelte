@@ -25,6 +25,23 @@
     frame.lines.filter(l => l.kind === 'narration').map(l => l.text).join(' ')
   );
 
+  // Reveal order, so players know where to look: the speech bubble types
+  // out first, then a pause, then the narration box, then a pause, then the
+  // choices one at a time. Times are in seconds and follow the per-word
+  // typing speed in SpeechBubble (0.035s) and Narration (0.03s).
+  const WORD_IN = 0.3;      // one word's own fade-in
+  const PAUSE = 0.7;        // beat between dialogue, narration and choices
+  const CHOICE_STAGGER = 0.18;
+  const countWords = (t) => t.trim().split(/\s+/).filter(Boolean).length;
+  const timing = $derived.by(() => {
+    const dialogueStart = 0.25;
+    const dialogueEnd = dialogueText ? dialogueStart + countWords(dialogueText) * 0.035 + WORD_IN : 0;
+    const narrStart = dialogueText ? dialogueEnd + PAUSE : 0.3;
+    const narrEnd = narrationText ? narrStart + countWords(narrationText) * 0.03 + WORD_IN : dialogueEnd;
+    const choicesStart = (narrationText || dialogueText) ? narrEnd + PAUSE : 0.3;
+    return { dialogueStart, narrStart, choicesStart };
+  });
+
   function pick(i) { story.choose(i); }
 </script>
 
@@ -42,8 +59,8 @@
   <!-- Speech bubble at character's head/shoulder level, tail pointing at them -->
   {#if dialogueText}
     {#key `${frame.sceneId}-bubble`}
-      <div class="bubble-slot" class:no-character={!hasCharacter} class:mom={frame.character?.startsWith('mom')} in:fade={{ duration: 320, delay: 250 }}>
-        <SpeechBubble text={dialogueText} tail={hasCharacter ? 'left' : 'none'} />
+      <div class="bubble-slot" class:no-character={!hasCharacter} class:mom={frame.character?.startsWith('mom')}>
+        <SpeechBubble text={dialogueText} tail={hasCharacter ? 'left' : 'none'} delay={timing.dialogueStart} />
       </div>
     {/key}
   {/if}
@@ -52,16 +69,17 @@
   <div class="right-column">
     {#if narrationText}
       {#key `${frame.sceneId}-narr`}
-        <div class="narration-block" in:fade={{ duration: 320, delay: 320 }}>
-          <Narration text={narrationText} />
+        <div class="narration-block">
+          <Narration text={narrationText} delay={timing.narrStart} />
         </div>
       {/key}
     {/if}
 
     {#if frame.choices.length}
-      <div class="choices" in:fade={{ duration: 320, delay: narrationText ? 460 : 360 }}>
+      {#key frame.sceneId}
+      <div class="choices">
         {#each frame.choices as c, i (c.index)}
-          <div class="choice-wrap" style="animation-delay: {0.5 + i * 0.08}s">
+          <div class="choice-wrap" style="animation-delay: {timing.choicesStart + i * CHOICE_STAGGER}s">
             <Choice label={c.label} style={c.style} effects={c.effects} onclick={() => pick(c.index)} />
           </div>
         {/each}
@@ -69,6 +87,7 @@
           <div class="ended">— end —</div>
         {/if}
       </div>
+      {/key}
     {/if}
   </div>
 
@@ -140,10 +159,17 @@
     width: 100%;
     pointer-events: auto;
   }
+  /* Hidden (and unclickable) until its turn: visibility flips on when the
+     delayed animation starts, and 'forwards' keeps it on afterwards. */
   .choice-wrap {
     opacity: 0;
-    animation: fadeUpIn 0.45s ease forwards;
+    visibility: hidden;
+    animation: choiceIn 0.45s ease forwards;
     width: 100%;
+  }
+  @keyframes choiceIn {
+    from { opacity: 0; visibility: visible; transform: translateY(8px); }
+    to   { opacity: 1; visibility: visible; transform: translateY(0); }
   }
   .choice-wrap :global(.choice) {
     width: 100%;

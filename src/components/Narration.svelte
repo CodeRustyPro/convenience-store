@@ -1,12 +1,14 @@
 <script>
   import { wavyBorder } from '../actions/wavyBorder.js';
-  let { text = '' } = $props();
+  // delay (s): when the box and its words start appearing, so the scene can
+  // reveal dialogue, then narration, then choices in order.
+  let { text = '', delay = 0 } = $props();
   const words = $derived(text.trim().split(/\s+/).filter(Boolean));
 </script>
 
-<div class="narration-outer">
+<div class="narration-outer" style="animation-delay: {delay}s">
   <div class="narration" use:wavyBorder={{
-    radius: 26,
+    radius: 3,
     fill: '#FFFFFF',
     stroke: '#151515',
     strokeWidth: 3.8,
@@ -15,7 +17,7 @@
   }}>
     <p class="text">
       {#each words as w, i (i)}
-        <span class="word" style="animation-delay: {i * 0.03}s">{w}</span>
+        <span class="word" style="animation-delay: {delay + i * 0.03}s">{w}</span>
       {/each}
     </p>
   </div>
@@ -36,12 +38,12 @@
     position: relative;
     box-sizing: border-box;
     width: 100%;
-    padding: 18px 24px;
+    padding: 22px 30px;
     background: transparent;
   }
   .text {
     margin: 0;
-    text-align: center;
+    text-align: left;
     color: #000000;
     font-family: 'Love Ya Like A Sister', cursive;
     font-size: 1.15rem;
