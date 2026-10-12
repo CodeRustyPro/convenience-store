@@ -186,7 +186,7 @@
     pointer-events: none;
     animation: deltaFloat 1.6s ease forwards;
   }
-  .delta.up { color: #3f9b54; }
+  .delta.up { color: var(--accent-green); }
   @keyframes deltaFloat {
     0%   { opacity: 0; transform: translate(-6px, -50%) scale(0.9); }
     18%  { opacity: 1; transform: translate(0, -50%) scale(1.06); }
