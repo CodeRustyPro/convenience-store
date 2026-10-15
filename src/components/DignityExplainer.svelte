@@ -46,16 +46,19 @@
   const CHOICES = [
     {
       label: 'Take the artisan loaf.',
+      art: [{ src: '/assets/products/sourdough.png', h: 118 }],
       keeps: [],
       text: 'Every part of the trick worked. You didn\'t look past the sourdough, so you lose all 10.',
     },
     {
       label: 'Ask staff for cheaper bread.',
+      art: [{ src: '/assets/chars/bread-clerk.png', h: 150, bust: true }, { src: '/assets/products/sourdough.png', h: 74 }],
       keeps: [0],
       text: 'You knew a cheaper loaf was there, so the store couldn\'t fool you about that: you keep those 2. But you still walked out with the ₹95 loaf, so everything else worked.',
     },
     {
       label: 'Crouch for the ₹40 bread.',
+      art: [{ src: '/assets/products/regular-bread.png', h: 140 }],
       keeps: [0, 1, 2, 3, 4, 5],
       text: 'None of it worked. It cost you a minute, but that comes off the clock, not your dignity.',
     },
@@ -155,21 +158,26 @@
       <div class="choices">
         {#each CHOICES as c}
           <div class="choice-block">
+            <div class="vignette" aria-hidden="true">
+              {#each c.art as a}
+                <img src={a.src} alt="" class:bust={a.bust} style="height:{a.h}px" />
+              {/each}
+            </div>
             <div class="choice-main">
               <div class="choice-head">
                 <div class="choice" use:wavyBorder={pill}><span class="label">{c.label}</span></div>
                 <span class="delta" class:kept={c.loss === 0}>−{c.loss}</span>
               </div>
               <p class="why">{c.text}</p>
+              <ul class="ticks">
+                {#each BREAD as part, i}
+                  <li class:kept={c.keeps.includes(i)}>
+                    <span class="mark">{c.keeps.includes(i) ? 'kept' : `−${part.pts}`}</span>
+                    <span>{part.what.split(':')[0].split(',')[0]}</span>
+                  </li>
+                {/each}
+              </ul>
             </div>
-            <ul class="ticks">
-              {#each BREAD as part, i}
-                <li class:kept={c.keeps.includes(i)}>
-                  <span class="mark">{c.keeps.includes(i) ? 'kept' : `−${part.pts}`}</span>
-                  <span>{part.what.split(':')[0].split(',')[0]}</span>
-                </li>
-              {/each}
-            </ul>
           </div>
         {/each}
       </div>
@@ -312,16 +320,28 @@
 
   .choices { display: flex; flex-direction: column; gap: 1.6rem; margin: 0.4rem 0; }
   .choice-block {
-    display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 2rem;
+    display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 2rem; align-items: start;
     padding-top: 1.4rem; border-top: 1.5px dotted var(--grey-low);
   }
+  /* What each choice looks like, drawn from the game's own art. */
+  .vignette {
+    display: flex; align-items: flex-end; justify-content: center; gap: 0.3rem;
+    height: 160px;
+  }
+  .vignette img { width: auto; max-width: 100%; object-fit: contain; filter: drop-shadow(0 3px 3px rgba(0, 0, 0, 0.15)); }
+  /* The clerk is a full-length figure; show head and shoulders. */
+  .vignette img.bust { width: 96px; object-fit: cover; object-position: top center; }
   .choice-main { display: flex; flex-direction: column; gap: 0.8rem; min-width: 0; }
   .choice-head { display: flex; align-items: center; gap: 1rem; }
-  .choice { flex: 1; min-width: 0; padding: 0.6rem 1.2rem; text-align: center; font-size: 1.05rem; filter: drop-shadow(-1px 3px 3px rgba(0, 0, 0, 0.14)); }
+  .choice { flex: 0 1 auto; min-width: 0; padding: 0.6rem 1.2rem; text-align: center; font-size: 1.05rem; filter: drop-shadow(-1px 3px 3px rgba(0, 0, 0, 0.14)); }
   .delta { flex: none; font-size: 1.9rem; color: var(--accent-red); font-variant-numeric: tabular-nums; }
   .delta.kept { color: var(--accent-green); }
   .why { font-size: 1.05rem; line-height: 1.5; color: var(--ink-soft); }
-  .ticks { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.3rem; font-size: 0.98rem; color: var(--ink-soft); }
+  .ticks {
+    list-style: none; margin: 0.2rem 0 0; padding: 0;
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.3rem 1.6rem;
+    font-size: 0.98rem; color: var(--ink-soft);
+  }
   .ticks li { display: flex; gap: 0.5rem; align-items: baseline; }
   .ticks .mark { flex: none; min-width: 2.4rem; color: var(--accent-red); font-variant-numeric: tabular-nums; }
   .ticks li.kept { color: var(--grey-low); }
