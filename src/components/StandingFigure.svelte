@@ -145,7 +145,15 @@
   @media (hover: none) and (pointer: coarse) and (orientation: portrait) {
     /* Bigger circle; the % sits lower, clear of the curved border. */
     .badge { width: 80px; height: 80px; }
-    .pct { font-size: 0.68rem; top: 22%; }
-    .figure { height: 60%; }
+    .pct { font-size: 0.68rem; top: 24%; }
+    /* The figure art has empty space above the head and below the feet, so
+       draw it bigger and lift it: the head then sits just under the %. */
+    .figure { height: 66%; margin-bottom: 6px; }
+    .flash {
+      -webkit-mask-size: auto 66%;
+              mask-size: auto 66%;
+      -webkit-mask-position: center calc(100% - 6px);
+              mask-position: center calc(100% - 6px);
+    }
   }
 </style>
