@@ -278,14 +278,13 @@ Looks like you got everything you needed. And maybe a few things you didn't need
 # character: guard-1
 See that little figure up in the corner of the screen? It's been there since you walked in, quietly keeping score.
 It's your dignity as a customer — and it slipped a little with every nudge, every upsell, every fee you didn't question. # event: relabelDignity
-* [Look at the corner ]
+* [Continue ]
     -> guard_final
 
 === guard_final ===
 # bg: exit
 # character: guard-2
 Well, I hope you had a nice visit. Come again soon.
-He hands you your receipt back. # narration
 * [Take a look at the receipt ]
     -> receipt
 
