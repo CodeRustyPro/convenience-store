@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none" stroke="#151515" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+  <!-- caps -->
+  <line x1="42" y1="22" x2="158" y2="22"/>
+  <line x1="42" y1="178" x2="158" y2="178"/>
+  <!-- glass -->
+  <path d="M60 22 C60 70 92 84 92 100 C92 116 60 130 60 178"/>
+  <path d="M140 22 C140 70 108 84 108 100 C108 116 140 130 140 178"/>
+  <!-- sand: what's left on top, the stream, and the pile below -->
+  <path d="M76 66 Q100 74 124 66 L104 92 L96 92 Z" fill="#151515" stroke-width="4"/>
+  <line x1="100" y1="96" x2="100" y2="146" stroke-width="4"/>
+  <path d="M68 170 Q100 126 132 170 Z" fill="#151515" stroke-width="4"/>
+</svg>
