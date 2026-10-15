@@ -3,10 +3,13 @@
   import { game, formatTime } from '../stores/game.js';
   import { wavyBorder } from '../actions/wavyBorder.js';
   import { fade, fly } from 'svelte/transition';
+  import DignityExplainer from './DignityExplainer.svelte';
 
   let { onRestart } = $props();
   let g = $state({ coins: 0, standing: 0, timeSeconds: 0 });
   game.subscribe((s) => { g = s; });
+
+  let explaining = $state(false);
 </script>
 
 <div class="final" in:fade={{ duration: 600 }}>
@@ -16,18 +19,28 @@
     </div>
 
     <div class="stats" in:fly={{ y: 12, duration: 600, delay: 900 }}>
-      <div class="stat"><div class="lbl">final dignity</div><div class="val">{g.standing}%</div></div>
+      <div class="stat"><div class="lbl">dignity left</div><div class="val">{g.standing}%</div></div>
       <div class="stat"><div class="lbl">coins left</div><div class="val">₹{g.coins}</div></div>
       <div class="stat"><div class="lbl">time left</div><div class="val">{formatTime(g.timeSeconds)}</div></div>
     </div>
 
-    <button class="play"
-            use:wavyBorder={{ radius: 26, fill: '#FFFFFF', stroke: '#151515', strokeWidth: 2.4, waviness: 3.6, baseFrequency: 0.020 }}
-            onclick={onRestart}
-            in:fly={{ y: 16, duration: 600, delay: 1300 }}>
-      <span class="play-label">SHOP AGAIN?</span>
-    </button>
+    <div class="actions" in:fly={{ y: 16, duration: 600, delay: 1300 }}>
+      <button class="play"
+              use:wavyBorder={{ radius: 'pill', fill: '#FFFFFF', stroke: '#151515', strokeWidth: 2.4, waviness: 3.6, baseFrequency: 0.020 }}
+              onclick={onRestart}>
+        <span class="play-label">SHOP AGAIN?</span>
+      </button>
+      <button class="play secondary"
+              use:wavyBorder={{ radius: 'pill', fill: '#FFFFFF', stroke: '#151515', strokeWidth: 2.4, waviness: 3.6, baseFrequency: 0.020 }}
+              onclick={() => (explaining = true)}>
+        <span class="play-label">HOW WAS DIGNITY CALCULATED?</span>
+      </button>
+    </div>
   </div>
+
+  {#if explaining}
+    <DignityExplainer score={g.standing} flags={g.flags} onClose={() => (explaining = false)} />
+  {/if}
 </div>
 
 <style>
@@ -85,6 +98,14 @@
     position: relative;
     z-index: 2;
   }
+  .actions {
+    display: flex;
+    gap: 1.4rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+  }
+  .play.secondary { font-size: 1.25rem; padding: 0.95rem 2.2rem; }
   .play:hover { transform: translateY(-2px); filter: drop-shadow(-1.2px 6px 4px rgba(0, 0, 0, 0.22)); }
   .play:active { transform: translateY(0); }
   .footnote {

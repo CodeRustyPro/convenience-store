@@ -147,7 +147,12 @@
     animation:
       itemIn 0.6s ease var(--in-delay) forwards,
       drift var(--drift-dur) ease-in-out var(--drift-delay) infinite alternate;
-    transition: background-color 0.3s ease, filter 0.3s ease;
+    transition: background-color 0.3s ease;
+    /* Own compositing layer: Safari can drop a masked element that is also
+       being transformed every frame unless it's promoted like this. */
+    will-change: transform, opacity;
+    -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
   }
   @keyframes drift {
     0%   { transform: translate(0, 0) rotate(0deg); }
@@ -157,9 +162,10 @@
   @media (prefers-reduced-motion: reduce) {
     .item { animation: itemIn 0.6s ease var(--in-delay) forwards; }
   }
+  /* No filter here: a filter on a masked, animated element is what makes
+     Safari stop drawing it. */
   .item.coloured {
     background-color: var(--colour);
-    filter: drop-shadow(0 0 0.5px var(--colour));
   }
   /* The drawings sit faint (50%) like the Figma frame, and full strength in
      colour on hover. */
