@@ -59,4 +59,9 @@
     opacity: 0;
     animation: wordIn 0.3s ease forwards;
   }
+
+  @media (hover: none) and (pointer: coarse) and (orientation: portrait) {
+    .narration { padding: 12px 16px; }
+    .text { font-size: 0.94rem; line-height: 1.36; }
+  }
 </style>

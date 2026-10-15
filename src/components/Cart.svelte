@@ -174,4 +174,19 @@
     60%  { opacity: 1; transform: translateY(4px) rotate(calc(var(--tilt, 0deg) + 2deg)) scale(1.05); }
     100% { opacity: 1; transform: rotate(var(--tilt, 0deg)) scale(1); }
   }
+
+  /* Portrait phones: a small cart in the bottom-right of the scene art. */
+  @media (hover: none) and (pointer: coarse) and (orientation: portrait) {
+    .cart-anchor {
+      left: auto;
+      right: 1%;
+      top: var(--art-top);
+      bottom: auto;
+      height: var(--art-h);
+      width: 48%;
+      max-width: none;
+      align-items: flex-end;
+    }
+    .cart-wrap { width: 100%; max-width: none; }
+  }
 </style>

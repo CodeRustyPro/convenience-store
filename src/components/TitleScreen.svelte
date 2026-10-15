@@ -47,19 +47,37 @@
     colourOf[i] = colourOf[i] < 0 ? i % HOVER.length : (colourOf[i] + 1) % HOVER.length;
   }
 
-  // Scale to the window height, but shrink further if the window is too
-  // narrow for both columns plus the title (1600 frame px).
+  // Portrait phones show just the title, PLAY and the credit (no drawings),
+  // with the title block scaled from a 1080-px-wide frame.
+  const PORTRAIT_MQ = '(hover: none) and (pointer: coarse) and (orientation: portrait)';
+  const P_W = 1080;
+
+  // Landscape: scale to the window height, but shrink further if the window
+  // is too narrow for both columns plus the title (1600 frame px).
+  // Portrait: scale the 1080 frame to the window width.
   const MIN_W = 1600;
+  let portrait = $state(false);
   let scale = $state(1);
   let offY = $state(0);
   $effect(() => {
+    const mq = window.matchMedia(PORTRAIT_MQ);
     const fit = () => {
-      scale = Math.min(window.innerHeight / FRAME_H, window.innerWidth / MIN_W);
-      offY = (window.innerHeight - FRAME_H * scale) / 2;
+      portrait = mq.matches;
+      if (portrait) {
+        scale = window.innerWidth / P_W;
+        offY = 0;
+      } else {
+        scale = Math.min(window.innerHeight / FRAME_H, window.innerWidth / MIN_W);
+        offY = (window.innerHeight - FRAME_H * scale) / 2;
+      }
     };
     fit();
     window.addEventListener('resize', fit);
-    return () => window.removeEventListener('resize', fit);
+    mq.addEventListener('change', fit);
+    return () => {
+      window.removeEventListener('resize', fit);
+      mq.removeEventListener('change', fit);
+    };
   });
 
   // Slow drift: each item floats, sways and tilts on its own cycle so the
@@ -91,9 +109,11 @@
   {/each}
 {/snippet}
 
-<div class="title-screen" style="--scale:{scale}; --off-y:{offY}px">
-  <div class="side left" aria-hidden="true">{@render art(left, 0)}</div>
-  <div class="side right" aria-hidden="true">{@render art(right, FRAME_W / 2)}</div>
+<div class="title-screen" class:portrait style="--scale:{scale}; --off-y:{offY}px">
+  {#if !portrait}
+    <div class="side left" aria-hidden="true">{@render art(left, 0)}</div>
+    <div class="side right" aria-hidden="true">{@render art(right, FRAME_W / 2)}</div>
+  {/if}
 
   <div class="center">
     <h1 class="hero">
@@ -110,8 +130,14 @@
       <span class="play-label">PLAY  →</span>
     </button>
 
-    <p class="credit">By Parisa Mehta and Srividhya S</p>
+    {#if !portrait}
+      <p class="credit">By Parisa Mehta and Srividhya S</p>
+    {/if}
   </div>
+
+  {#if portrait}
+    <p class="credit bottom-credit">By Parisa Mehta and Srividhya S</p>
+  {/if}
 </div>
 
 <style>
@@ -234,5 +260,39 @@
     z-index: 2;
     opacity: 0;
     animation: fadeIn 0.7s ease 1.2s forwards;
+  }
+
+  /* ---- Portrait phones ----
+     Title and PLAY centred (in 1080-px frame units scaled to the screen
+     width); the credit sits at the bottom of the screen. */
+  .portrait .center {
+    top: 50%;
+    left: 50%;
+    width: 1080px;
+    height: auto;
+    transform: translate(-50%, -50%) scale(var(--scale, 1));
+    transform-origin: 50% 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .portrait .hero { position: static; width: auto; }
+  .portrait .play {
+    position: static;
+    transform: none;
+    margin-top: 70px;
+    padding: 26px 96px;
+    font-size: 56px;
+  }
+  .portrait .play:hover, .portrait .play:active { transform: none; }
+  .portrait .bottom-credit {
+    left: 0;
+    right: 0;
+    top: auto;
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 22px);
+    transform: none;
+    width: auto;
+    font-size: 14px;
+    letter-spacing: -0.2px;
   }
 </style>

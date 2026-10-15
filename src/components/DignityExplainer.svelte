@@ -395,4 +395,43 @@
   .done { padding: 0.7rem 2rem; font-size: 1.15rem; filter: drop-shadow(-1px 4px 3px rgba(0, 0, 0, 0.16)); }
   .back, .done { transition: transform 0.15s ease; }
   .back:hover, .done:hover { transform: translateY(-2px); }
+
+  /* Portrait phones: a single column; side-by-side pieces stack. */
+  @media (hover: none) and (pointer: coarse) and (orientation: portrait) {
+    .back { top: calc(env(safe-area-inset-top, 0px) + 0.8rem); margin-left: 1rem; }
+    article { padding: 0.5rem 1.15rem calc(env(safe-area-inset-bottom, 0px) + 3rem); gap: 2.6rem; }
+    header { min-height: 80vh; min-height: 80dvh; }
+    h1 { font-size: 2.2rem; }
+    .lede { font-size: 1.12rem; }
+    .poses { gap: 0.9rem; }
+    .poses img { height: 72px; }
+    h2 { font-size: 1.4rem; }
+    p { font-size: 1.02rem; }
+
+    .with-art { grid-template-columns: 1fr; gap: 1rem; }
+    .with-art .figure { justify-self: center; height: 180px; }
+    .figure.bust { width: 120px; }
+
+    .parts-of-dignity { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.9rem 1rem; }
+    .kinds { grid-template-columns: 1fr; gap: 1.6rem; }
+    .kind-art { height: 110px; }
+
+    .scene { padding: 1.1rem 1.2rem; gap: 0.8rem; flex-direction: column; align-items: flex-start; }
+    .loaves img { height: 80px; }
+    .loaves img.small { height: 62px; }
+
+    .takes li { flex-wrap: wrap; row-gap: 0.1rem; }
+    .kind-tag { width: 100%; padding-left: 3rem; }
+
+    .choice-block { grid-template-columns: 1fr; gap: 1rem; }
+    .vignette { height: 170px; }
+    .vignette img { max-height: 170px; }
+    .ticks { grid-template-columns: 1fr; }
+
+    .totals { gap: 1.2rem 1.6rem; }
+    .total .lbl { font-size: 0.8rem; letter-spacing: 0.1em; }
+    .total .val { font-size: 2.2rem; }
+    .sum { font-size: 1.3rem; }
+    .sum .big { font-size: 2.1rem; }
+  }
 </style>

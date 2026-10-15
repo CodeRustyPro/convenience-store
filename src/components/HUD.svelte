@@ -196,4 +196,22 @@
     78%  { opacity: 1; transform: translate(0, -70%); }
     100% { opacity: 0; transform: translate(0, -95%); }
   }
+
+  /* Portrait phones: one compact row along the top. */
+  @media (hover: none) and (pointer: coarse) and (orientation: portrait) {
+    .hud {
+      bottom: auto;
+      height: var(--hud-h);
+      padding: calc(env(safe-area-inset-top, 0px) + 10px) 12px 0;
+      align-items: flex-start;
+    }
+    .game-title { display: none; }
+    .hud-left { flex-direction: column; gap: 6px; }
+    .pill, .pill.wide { width: 140px; height: 40px; padding: 0 12px; font-size: 0.95rem; }
+    .content { gap: 0.4rem; }
+    .icon { width: 19px; height: 19px; }
+    .value { min-width: 0; }
+    /* Change badges drop below the pill instead of beside it. */
+    .delta { font-size: 1rem; }
+  }
 </style>

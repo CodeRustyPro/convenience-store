@@ -279,4 +279,14 @@
   .cont-label { position: relative; z-index: 2; }
   .cont:hover { transform: translateY(-2px); filter: drop-shadow(-1.2px 6px 4px rgba(0, 0, 0, 0.22)); }
   .cont:active { transform: translateY(0); }
+
+  @media (hover: none) and (pointer: coarse) and (orientation: portrait) {
+    .overlay {
+      padding: calc(env(safe-area-inset-top, 0px) + 1rem) 0.75rem calc(env(safe-area-inset-bottom, 0px) + 1.5rem);
+    }
+    .receipt { width: 100%; padding: 1.5rem 1.1rem 1.3rem; }
+    .rows li { font-size: 0.98rem; }
+    h3 { font-size: 0.8rem; letter-spacing: 0.14em; }
+    .rows li.big, .line-total.big { font-size: 1.1rem; }
+  }
 </style>

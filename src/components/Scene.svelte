@@ -182,4 +182,34 @@
     margin-top: 0.6rem;
     text-align: center;
   }
+
+  /* Portrait phones: scene art across the top, with the character and
+     their speech bubble on it; narration and choices below. */
+  @media (hover: none) and (pointer: coarse) and (orientation: portrait) {
+    .scene :global(.bg-stack) { top: var(--art-top); bottom: auto; height: var(--art-h); }
+    .character-layer { inset: var(--art-top) 0 auto 0; height: var(--art-h); }
+    .bubble-slot, .bubble-slot.mom {
+      left: auto;
+      right: 4%;
+      top: calc(var(--art-top) + 12px);
+      width: 54%;
+      min-width: 0;
+      max-width: none;
+    }
+    .bubble-slot.no-character { left: 6%; right: 6%; width: auto; }
+    .right-column {
+      left: 16px;
+      right: 16px;
+      top: calc(var(--art-top) + var(--art-h) + 10px);
+      bottom: calc(env(safe-area-inset-bottom, 0px) + 12px);
+      transform: none;
+      width: auto;
+      max-width: none;
+      justify-content: flex-start;
+      gap: 0.7rem;
+      overflow-y: auto;
+      pointer-events: auto;
+    }
+    .choices { gap: 0.55rem; }
+  }
 </style>

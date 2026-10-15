@@ -74,4 +74,10 @@
     transform: translateY(-50%);
     z-index: 2;
   }
+
+  @media (hover: none) and (pointer: coarse) and (orientation: portrait) {
+    .bubble { padding: 12px 14px; }
+    .text { font-size: 0.9rem; line-height: 1.28; }
+    .bubble-tail { transform: translateY(-50%) scale(0.8); left: -20px; }
+  }
 </style>

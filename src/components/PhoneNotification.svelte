@@ -96,4 +96,11 @@
     25%      { transform: translate(0, calc(-50% - 2px)) rotate(-1.5deg); }
     75%      { transform: translate(0, -50%) rotate(1.5deg); }
   }
+
+  @media (hover: none) and (pointer: coarse) and (orientation: portrait) {
+    .phone-outer { left: 36px; right: 36px; width: auto; top: calc(var(--art-top) + 14%); }
+    .phone { padding: 10px 16px; }
+    .head { font-size: 0.8rem; margin-bottom: 0.15rem; }
+    .body { font-size: 0.98rem; }
+  }
 </style>
