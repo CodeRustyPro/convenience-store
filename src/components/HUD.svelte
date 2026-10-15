@@ -8,6 +8,18 @@
   let state = $state({ coins: 500, timeSeconds: 900, standing: 100, standingLabel: 'STANDING' });
   game.subscribe((s) => { state = s; });
 
+  // Pill corners: desktop pills are 57px tall with 26px corners. On portrait
+  // phones they're 44px tall, so the corners scale with them (same shape).
+  const PORTRAIT_MQ = '(hover: none) and (pointer: coarse) and (orientation: portrait)';
+  let pillRadius = $state(26);
+  $effect(() => {
+    const mq = window.matchMedia(PORTRAIT_MQ);
+    const set = () => { pillRadius = mq.matches ? 20 : 26; };
+    set();
+    mq.addEventListener('change', set);
+    return () => mq.removeEventListener('change', set);
+  });
+
   let coinsEl, timeEl;
   let prevCoins = 500, prevTime = 900;
   let coinsLowFlashed = false;
@@ -68,7 +80,7 @@
   <div class="hud-left">
     <Tooltip label="Your mother's money." placement="bottom">
       <div class="pill" class:warn={state.coins < 50}
-           use:wavyBorder={{ radius: 26, fill: '#FFFFFF', stroke: '#151515', strokeWidth: 2.2, waviness: 3.2, baseFrequency: 0.022 }}>
+           use:wavyBorder={{ radius: pillRadius, fill: '#FFFFFF', stroke: '#151515', strokeWidth: 2.2, waviness: 3.2, baseFrequency: 0.022 }}>
         <span class="content">
           <img src="/assets/ui/wallet.png" alt="" class="icon" />
           <span class="value" bind:this={coinsEl}>₹ {state.coins}</span>
@@ -83,7 +95,7 @@
 
     <Tooltip label="Her medication window." placement="bottom">
       <div class="pill wide" class:warn={state.timeSeconds < 180}
-           use:wavyBorder={{ radius: 26, fill: '#FFFFFF', stroke: '#151515', strokeWidth: 2.2, waviness: 3.2, baseFrequency: 0.022 }}>
+           use:wavyBorder={{ radius: pillRadius, fill: '#FFFFFF', stroke: '#151515', strokeWidth: 2.2, waviness: 3.2, baseFrequency: 0.022 }}>
         <span class="content">
           <img src="/assets/ui/hourglass.svg" alt="" class="icon" />
           <span class="value" bind:this={timeEl}>{formatTime(state.timeSeconds)} m</span>
@@ -207,7 +219,9 @@
     }
     .game-title { display: none; }
     .hud-left { flex-direction: column; gap: 6px; }
-    .pill, .pill.wide { width: 140px; height: 40px; padding: 0 12px; font-size: 0.95rem; }
+    /* Same proportions as the desktop pills (168x57 and 186x57), smaller. */
+    .pill { width: 130px; height: 44px; padding: 0 12px; font-size: 0.95rem; }
+    .pill.wide { width: 144px; }
     .content { gap: 0.4rem; }
     .icon { width: 19px; height: 19px; }
     .value { min-width: 0; }
