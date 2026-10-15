@@ -86,7 +86,7 @@
            use:wavyBorder={{ radius: 26, fill: '#FFFFFF', stroke: '#151515', strokeWidth: 2.2, waviness: 3.2, baseFrequency: 0.022 }}>
         <span class="content">
           <img src="/assets/ui/hourglass.svg" alt="" class="icon" />
-          <span class="value" bind:this={timeEl}>{formatTime(state.timeSeconds)} minutes</span>
+          <span class="value" bind:this={timeEl}>{formatTime(state.timeSeconds)} m</span>
           {#if timeDelta}
             {#key timeDelta.key}
               <span class="delta" class:up={timeDelta.up}>{timeDelta.text}</span>
@@ -159,8 +159,8 @@
     justify-content: center;
     gap: 0.5rem;
   }
-  /* Wide enough for "15:00 minutes". */
-  .pill.wide { width: 222px; }
+  /* Wide enough for "15:00 m". */
+  .pill.wide { width: 186px; }
   .icon {
     width: 27px;
     height: 27px;

@@ -66,8 +66,6 @@
 
   // The corner figure, as it slumps from 100% down to 10%.
   const POSES = [100, 75, 50, 25, 10];
-  // Same buckets as the HUD figure (StandingFigure.svelte).
-  const poseFor = (s) => (s >= 88 ? 100 : s >= 63 ? 75 : s >= 38 ? 50 : s >= 18 ? 25 : 10);
 
   const KIND_LABEL = { hides: 'hides', pressures: 'pressures', smart: 'smart choice' };
 
@@ -238,10 +236,6 @@
         <span class="op">=</span><span class="red big">{score}%</span>
       </p>
       <p class="yours">dignity left</p>
-      <figure class="you">
-        <img src="/assets/ui/dignity-{poseFor(score)}.png" alt="" />
-        <figcaption>you, walking out</figcaption>
-      </figure>
     </section>
 
     <footer>
@@ -394,10 +388,6 @@
   .sum .red { color: var(--accent-red); }
   .sum .big { font-weight: 700; font-size: 2.6rem; }
   .yours { max-width: none; text-align: center; font-size: 1rem; letter-spacing: 0.16em; text-transform: uppercase; margin-top: -0.6rem; }
-
-  .you { margin: 0.6rem 0 0; display: flex; flex-direction: column; align-items: center; gap: 0.3rem; }
-  .you img { height: 150px; width: auto; }
-  .you figcaption { font-size: 0.95rem; color: var(--grey-mid); }
 
   footer { display: flex; flex-direction: column; align-items: center; gap: 1.6rem; padding-top: 1.2rem; border-top: 1.5px dotted var(--grey-low); }
   .note { font-size: 0.95rem; color: var(--grey-mid); text-align: center; line-height: 1.5; }

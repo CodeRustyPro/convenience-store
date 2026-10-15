@@ -11,7 +11,7 @@
     radius: 3,
     fill: '#FFFFFF',
     stroke: '#151515',
-    strokeWidth: 3.8,
+    strokeWidth: 2.4,   /* same line weight as speech bubbles and choices */
     waviness: 3.6,
     baseFrequency: 0.020
   }}>
