@@ -98,8 +98,9 @@
   }
 
   @media (hover: none) and (pointer: coarse) and (orientation: portrait) {
-    .phone-outer { left: 16px; right: 16px; width: auto; top: calc(var(--art-top) + 18%); }
-    .phone { padding: 14px 18px; }
-    .body { font-size: 1.15rem; }
+    .phone-outer { left: 36px; right: 36px; width: auto; top: calc(var(--art-top) + 14%); }
+    .phone { padding: 10px 16px; }
+    .head { font-size: 0.8rem; margin-bottom: 0.15rem; }
+    .body { font-size: 0.98rem; }
   }
 </style>

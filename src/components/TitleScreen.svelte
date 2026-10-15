@@ -47,40 +47,10 @@
     colourOf[i] = colourOf[i] < 0 ? i % HOVER.length : (colourOf[i] + 1) % HOVER.length;
   }
 
-  // Portrait phones get their own arrangement: the same drawings in a band
-  // above the title and a band below it, on a 1080-px-wide frame. Positions
-  // are [x, y, band] in that frame; each band is pinned to its screen edge.
+  // Portrait phones show just the title, PLAY and the credit (no drawings),
+  // with the title block scaled from a 1080-px-wide frame.
   const PORTRAIT_MQ = '(hover: none) and (pointer: coarse) and (orientation: portrait)';
   const P_W = 1080;
-  const P_H = 1900;   // top band + title + bottom band, with a little air
-  const PORTRAIT = {
-    sourdough:     [10,   0,   'top'],
-    amul:          [300, -20,  'top'],
-    cookies:       [500,  20,  'top'],
-    safal:         [866,   0,  'top'],
-    chips:         [40,  230,  'top'],
-    'ok-can':      [255, 270,  'top'],
-    'wheat-flour': [405, 205,  'top'],
-    'caffe-latte': [625, 180,  'top'],
-    apples:        [800, 205,  'top'],
-    'cup-noodles': [110, 455,  'top'],
-    vaporub:       [330, 480,  'top'],
-    eggs:          [480, 445,  'top'],
-    'wafer-stix':  [760, 430,  'top'],
-    maggi:         [40,   30,  'bottom'],
-    'ice-cream':   [275,  10,  'bottom'],
-    'choco-latte': [470,   0,  'bottom'],
-    pretzels:      [720,  15,  'bottom'],
-    basmati:       [0,   265,  'bottom'],
-    'taste-bag':   [180, 330,  'bottom'],
-    bread:         [545, 315,  'bottom'],
-    'rice-bag':    [790, 215,  'bottom'],
-  };
-  const placed = (band) => ITEMS.map((it, i) => ({ ...it, i }))
-    .filter((it) => PORTRAIT[it.name][2] === band)
-    .map((it) => ({ ...it, x: PORTRAIT[it.name][0], y: PORTRAIT[it.name][1] }));
-  const topBand = placed('top');
-  const bottomBand = placed('bottom');
 
   // Landscape: scale to the window height, but shrink further if the window
   // is too narrow for both columns plus the title (1600 frame px).
@@ -89,15 +59,12 @@
   let portrait = $state(false);
   let scale = $state(1);
   let offY = $state(0);
-  let offX = $state(0);
   $effect(() => {
     const mq = window.matchMedia(PORTRAIT_MQ);
     const fit = () => {
       portrait = mq.matches;
       if (portrait) {
-        // Fit the width, unless the screen is too short for bands + title.
-        scale = Math.min(window.innerWidth / P_W, window.innerHeight / P_H);
-        offX = (window.innerWidth - P_W * scale) / 2;
+        scale = window.innerWidth / P_W;
         offY = 0;
       } else {
         scale = Math.min(window.innerHeight / FRAME_H, window.innerWidth / MIN_W);
@@ -142,11 +109,8 @@
   {/each}
 {/snippet}
 
-<div class="title-screen" class:portrait style="--scale:{scale}; --off-y:{offY}px; --off-x:{offX}px">
-  {#if portrait}
-    <div class="band top" aria-hidden="true">{@render art(topBand, 0)}</div>
-    <div class="band bottom" aria-hidden="true">{@render art(bottomBand, 0)}</div>
-  {:else}
+<div class="title-screen" class:portrait style="--scale:{scale}; --off-y:{offY}px">
+  {#if !portrait}
     <div class="side left" aria-hidden="true">{@render art(left, 0)}</div>
     <div class="side right" aria-hidden="true">{@render art(right, FRAME_W / 2)}</div>
   {/if}
@@ -166,8 +130,14 @@
       <span class="play-label">PLAY  →</span>
     </button>
 
-    <p class="credit">By Parisa Mehta and Srividhya S</p>
+    {#if !portrait}
+      <p class="credit">By Parisa Mehta and Srividhya S</p>
+    {/if}
   </div>
+
+  {#if portrait}
+    <p class="credit bottom-credit">By Parisa Mehta and Srividhya S</p>
+  {/if}
 </div>
 
 <style>
@@ -293,16 +263,8 @@
   }
 
   /* ---- Portrait phones ----
-     Bands of drawings pinned to the top and bottom edges, title centred
-     between them; all in 1080-px frame units scaled to the screen width. */
-  .band {
-    position: absolute;
-    left: var(--off-x, 0);
-    width: 1080px;
-    transform: scale(var(--scale, 1));
-  }
-  .band.top { top: 0; height: 620px; transform-origin: 0 0; }
-  .band.bottom { bottom: 0; height: 640px; transform-origin: 0 100%; }
+     Title and PLAY centred (in 1080-px frame units scaled to the screen
+     width); the credit sits at the bottom of the screen. */
   .portrait .center {
     top: 50%;
     left: 50%;
@@ -323,12 +285,14 @@
     font-size: 56px;
   }
   .portrait .play:hover, .portrait .play:active { transform: none; }
-  .portrait .credit {
-    position: static;
+  .portrait .bottom-credit {
+    left: 0;
+    right: 0;
+    top: auto;
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 22px);
     transform: none;
     width: auto;
-    margin-top: 64px;
-    font-size: 40px;
-    letter-spacing: -0.5px;
+    font-size: 14px;
+    letter-spacing: -0.2px;
   }
 </style>

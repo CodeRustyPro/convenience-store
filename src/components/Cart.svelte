@@ -183,7 +183,7 @@
       top: var(--art-top);
       bottom: auto;
       height: var(--art-h);
-      width: 34%;
+      width: 48%;
       max-width: none;
       align-items: flex-end;
     }

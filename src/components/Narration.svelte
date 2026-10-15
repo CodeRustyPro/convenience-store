@@ -61,7 +61,7 @@
   }
 
   @media (hover: none) and (pointer: coarse) and (orientation: portrait) {
-    .narration { padding: 14px 18px; }
-    .text { font-size: 1.02rem; line-height: 1.38; }
+    .narration { padding: 12px 16px; }
+    .text { font-size: 0.94rem; line-height: 1.36; }
   }
 </style>

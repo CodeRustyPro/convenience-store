@@ -143,7 +143,9 @@
   }
 
   @media (hover: none) and (pointer: coarse) and (orientation: portrait) {
-    .badge { width: 60px; height: 60px; }
-    .pct { font-size: 0.62rem; top: 12%; }
+    /* Bigger circle; the % sits lower, clear of the curved border. */
+    .badge { width: 80px; height: 80px; }
+    .pct { font-size: 0.68rem; top: 22%; }
+    .figure { height: 60%; }
   }
 </style>

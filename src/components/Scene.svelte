@@ -192,7 +192,7 @@
       left: auto;
       right: 4%;
       top: calc(var(--art-top) + 12px);
-      width: 58%;
+      width: 54%;
       min-width: 0;
       max-width: none;
     }
@@ -200,7 +200,7 @@
     .right-column {
       left: 16px;
       right: 16px;
-      top: calc(var(--art-top) + var(--art-h) + 14px);
+      top: calc(var(--art-top) + var(--art-h) + 10px);
       bottom: calc(env(safe-area-inset-bottom, 0px) + 12px);
       transform: none;
       width: auto;

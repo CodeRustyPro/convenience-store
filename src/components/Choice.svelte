@@ -129,9 +129,9 @@
   .choice:disabled { color: #bbb; cursor: not-allowed; }
 
   @media (hover: none) and (pointer: coarse) and (orientation: portrait) {
-    .choice, .row { min-height: 48px; }
-    .row { padding: 0.5rem 1rem 0.5rem 1.2rem; }
-    .choice { font-size: 1rem; }
+    .choice, .row { min-height: 44px; }
+    .row { padding: 0.4rem 1rem 0.4rem 1.2rem; }
+    .choice { font-size: 0.94rem; }
     .chip { font-size: 0.8rem; }
     /* No hover on touch: don't leave a button looking lifted after a tap. */
     .choice:hover:not(:disabled) { transform: none; }

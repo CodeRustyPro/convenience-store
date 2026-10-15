@@ -206,18 +206,12 @@
       align-items: flex-start;
     }
     .game-title { display: none; }
-    .hud-left { flex-direction: row; gap: 8px; }
-    .pill, .pill.wide { width: auto; height: 46px; padding: 0 16px; font-size: 1rem; }
+    .hud-left { flex-direction: column; gap: 6px; }
+    .pill, .pill.wide { width: 140px; height: 40px; padding: 0 12px; font-size: 0.95rem; }
     .content { gap: 0.4rem; }
-    .icon { width: 20px; height: 20px; }
+    .icon { width: 19px; height: 19px; }
     .value { min-width: 0; }
     /* Change badges drop below the pill instead of beside it. */
-    .delta { left: 50%; top: calc(100% + 4px); font-size: 1rem; animation-name: deltaDrop; }
-    @keyframes deltaDrop {
-      0%   { opacity: 0; transform: translate(-50%, -4px) scale(0.9); }
-      18%  { opacity: 1; transform: translate(-50%, 0) scale(1.06); }
-      78%  { opacity: 1; transform: translate(-50%, 4px); }
-      100% { opacity: 0; transform: translate(-50%, 12px); }
-    }
+    .delta { font-size: 1rem; }
   }
 </style>

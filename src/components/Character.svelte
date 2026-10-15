@@ -72,6 +72,6 @@
   }
 
   @media (hover: none) and (pointer: coarse) and (orientation: portrait) {
-    .character-slot { left: 3%; height: calc(var(--h) * 0.92); }
+    .character-slot { left: 2%; height: calc(var(--h) * 1.12); }
   }
 </style>
