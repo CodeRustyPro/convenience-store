@@ -105,7 +105,6 @@
     justify-content: center;
     align-items: center;
   }
-  .play.secondary { font-size: 1.25rem; padding: 0.95rem 2.2rem; }
   .play:hover { transform: translateY(-2px); filter: drop-shadow(-1.2px 6px 4px rgba(0, 0, 0, 0.22)); }
   .play:active { transform: translateY(0); }
   .footnote {
