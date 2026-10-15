@@ -48,9 +48,8 @@
   }
 
   // Portrait phones show just the title, PLAY and the credit (no drawings),
-  // with the title block scaled from a 1080-px-wide frame.
+  // laid out with plain CSS (see the portrait styles below).
   const PORTRAIT_MQ = '(hover: none) and (pointer: coarse) and (orientation: portrait)';
-  const P_W = 1080;
 
   // Landscape: scale to the window height, but shrink further if the window
   // is too narrow for both columns plus the title (1600 frame px).
@@ -64,7 +63,7 @@
     const fit = () => {
       portrait = mq.matches;
       if (portrait) {
-        scale = window.innerWidth / P_W;
+        scale = 1;
         offY = 0;
       } else {
         scale = Math.min(window.innerHeight / FRAME_H, window.innerWidth / MIN_W);
@@ -263,26 +262,34 @@
   }
 
   /* ---- Portrait phones ----
-     Title and PLAY centred (in 1080-px frame units scaled to the screen
-     width); the credit sits at the bottom of the screen. */
+     Plain layout, no scaling: the title is sized to the screen width,
+     PLAY sits right under it, and the credit sits at the bottom. */
+  .title-screen.portrait { top: 0; right: 0; bottom: 0; left: 0; }
   .portrait .center {
-    top: 50%;
-    left: 50%;
-    width: 1080px;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: auto;
     height: auto;
-    transform: translate(-50%, -50%) scale(var(--scale, 1));
-    transform-origin: 50% 50%;
+    transform: none;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    padding: 0 20px 72px;
   }
-  .portrait .hero { position: static; width: auto; }
+  .portrait .hero {
+    position: static;
+    width: auto;
+    font-size: min(13vw, 72px);
+  }
   .portrait .play {
     position: static;
     transform: none;
-    margin-top: 70px;
-    padding: 26px 96px;
-    font-size: 56px;
+    margin-top: 28px;
+    padding: 12px 38px;
+    font-size: 20px;
   }
   .portrait .play:hover, .portrait .play:active { transform: none; }
   .portrait .bottom-credit {
