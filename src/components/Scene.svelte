@@ -17,6 +17,14 @@
   let frame = $state({ sceneId: 0, lines: [], choices: [], bg: null, character: null, ended: false, phone: null });
   story.subscribe((f) => { frame = f; });
 
+  // On phones the narration + choices column can scroll; start every scene
+  // at the top rather than wherever the last one was left.
+  let rightCol;
+  $effect(() => {
+    frame.sceneId;
+    if (rightCol) rightCol.scrollTop = 0;
+  });
+
   const hasCharacter = $derived(!!frame.character && frame.character !== 'none');
   const dialogueText = $derived(
     frame.lines.filter(l => l.kind === 'dialogue').map(l => l.text).join(' ')
@@ -66,7 +74,7 @@
   {/if}
 
   <!-- Right column: narration + choices stacked together, vertically centered -->
-  <div class="right-column">
+  <div class="right-column" bind:this={rightCol}>
     {#if narrationText}
       {#key `${frame.sceneId}-narr`}
         <div class="narration-block">
@@ -192,7 +200,7 @@
       left: auto;
       right: 4%;
       top: calc(var(--art-top) + 12px);
-      width: 54%;
+      width: 60%;
       min-width: 0;
       max-width: none;
     }

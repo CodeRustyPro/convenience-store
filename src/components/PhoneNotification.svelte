@@ -58,7 +58,7 @@
     position: relative;
     box-sizing: border-box;
     width: 100%;
-    padding: 18px 26px;
+    padding: 22px 30px;
     background: transparent;
   }
   .head {
@@ -99,7 +99,7 @@
 
   @media (hover: none) and (pointer: coarse) and (orientation: portrait) {
     .phone-outer { left: 36px; right: 36px; width: auto; top: calc(var(--art-top) + 14%); }
-    .phone { padding: 12px 24px 14px; }
+    .phone { padding: 16px 26px 18px; }
     .head { font-size: 0.8rem; margin-bottom: 0.15rem; }
     .body { font-size: 0.98rem; }
   }

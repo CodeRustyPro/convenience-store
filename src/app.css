@@ -106,8 +106,8 @@ button:disabled { cursor: not-allowed; }
   :root {
     --hud-h: calc(env(safe-area-inset-top, 0px) + 98px);
     --art-top: var(--hud-h);
-    --art-h: 45vh;
-    --art-h: 45dvh;
+    --art-h: 42vh;
+    --art-h: 42dvh;
     font-size: 15px;
   }
 }
