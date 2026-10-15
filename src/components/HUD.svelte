@@ -211,7 +211,7 @@
     .content { gap: 0.4rem; }
     .icon { width: 19px; height: 19px; }
     .value { min-width: 0; }
-    /* Change badges drop below the pill instead of beside it. */
-    .delta { font-size: 1rem; }
+    /* Change badges: a little more room from the pill. */
+    .delta { font-size: 1rem; left: calc(100% + 0.9rem); }
   }
 </style>
