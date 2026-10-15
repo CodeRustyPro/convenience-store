@@ -270,7 +270,6 @@ A security guard stands to the side, and asks you to show your receipt. # narrat
 # bg: exit
 # character: guard-2
 Looks like you got everything you needed. And maybe a few things you didn't need.
-He runs his eyes down your receipt. # narration
 * [Continue ]
     -> guard_meter
 
@@ -278,9 +277,8 @@ He runs his eyes down your receipt. # narration
 # bg: exit
 # character: guard-1
 See that little figure up in the corner of the screen? It's been there since you walked in, quietly keeping score.
-It's your dignity as a customer — and it slipped a little with every nudge, every upsell, every fee you didn't question.
-Watch the corner. # narration # event: relabelDignity
-* [Listen ]
+It's your dignity as a customer — and it slipped a little with every nudge, every upsell, every fee you didn't question. # event: relabelDignity
+* [Look at the corner ]
     -> guard_final
 
 === guard_final ===
