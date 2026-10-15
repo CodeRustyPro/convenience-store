@@ -122,6 +122,8 @@ function advance() {
   // Mirror game.standing into Ink so adaptive knots can branch on it.
   const gs = get(game);
   try { inkStory.variablesState.$('standing', gs.standing); } catch {}
+  // And what's been paid so far, for lines that quote it (the gate).
+  try { inkStory.variablesState.$('spent', 500 - gs.coins); } catch {}
 
   const lines = [];          // [{ text, kind: 'dialogue' | 'narration' }]
   let bg = null;
