@@ -76,7 +76,6 @@
       {/if}
     </div>
   {/if}
-  <div class="paper-grain"></div>
 </div>
 
 <!-- Phones held sideways only: on phones the story is played upright. -->

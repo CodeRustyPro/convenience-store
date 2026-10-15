@@ -75,7 +75,7 @@
     z-index: 2;
     width: 100%;
     min-height: 52px;
-    padding: 0.55rem 1.4rem 0.55rem 1.6rem;
+    padding: 0.75rem 1.8rem 0.75rem 2rem;
     display: grid;
     grid-template-columns: 1fr auto;
     align-items: center;
@@ -130,7 +130,7 @@
 
   @media (hover: none) and (pointer: coarse) and (orientation: portrait) {
     .choice, .row { min-height: 44px; }
-    .row { padding: 0.4rem 1rem 0.4rem 1.2rem; }
+    .row { padding: 0.5rem 1.3rem 0.5rem 1.5rem; }
     .choice { font-size: 0.94rem; }
     .chip { font-size: 0.8rem; }
     /* No hover on touch: don't leave a button looking lifted after a tap. */

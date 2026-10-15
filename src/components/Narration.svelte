@@ -38,7 +38,7 @@
     position: relative;
     box-sizing: border-box;
     width: 100%;
-    padding: 22px 30px;
+    padding: 26px 36px;
     background: transparent;
   }
   .text {
@@ -61,7 +61,7 @@
   }
 
   @media (hover: none) and (pointer: coarse) and (orientation: portrait) {
-    .narration { padding: 12px 16px; }
+    .narration { padding: 15px 22px; }
     .text { font-size: 0.94rem; line-height: 1.36; }
   }
 </style>

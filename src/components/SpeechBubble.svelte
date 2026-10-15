@@ -46,7 +46,7 @@
     position: relative;
     box-sizing: border-box;
     width: 100%;
-    padding: 18px 22px;
+    padding: 24px 30px;
     background: transparent;
   }
   .text {
@@ -76,7 +76,7 @@
   }
 
   @media (hover: none) and (pointer: coarse) and (orientation: portrait) {
-    .bubble { padding: 12px 14px; }
+    .bubble { padding: 18px 22px; }
     .text { font-size: 0.9rem; line-height: 1.28; }
     .bubble-tail { transform: translateY(-50%) scale(0.8); left: -20px; }
   }
