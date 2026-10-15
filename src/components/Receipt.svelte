@@ -73,7 +73,7 @@
   const MECHANISMS = [
     { key: 'D', label: "Times you didn't see the trick",               tries: 9 },
     { key: 'P', label: 'Times you gave in to pressure',                 tries: 8 },
-    { key: 'O', label: 'Times "the smart choice" won you over',         tries: 9 },
+    { key: 'O', label: 'Times the "smart" choice won you over',         tries: 9 },
   ];
   const hits = $derived(Object.entries(g.flags || {})
     .filter(([k, v]) => k.startsWith('dg_') && typeof v === 'string')

@@ -67,7 +67,7 @@
   // The corner figure, as it slumps from 100% down to 10%.
   const POSES = [100, 75, 50, 25, 10];
 
-  const KIND_LABEL = { hides: 'hides', pressures: 'pressures', smart: 'smart choice' };
+  const KIND_LABEL = { hides: 'hides', pressures: 'pressures', smart: '"smart" choice' };
 
   const pill = { radius: 'pill', fill: '#FFFFFF', stroke: '#151515', strokeWidth: 2, waviness: 3, baseFrequency: 0.022 };
   const box  = { radius: 3, fill: '#FFFFFF', stroke: '#151515', strokeWidth: 2.6, waviness: 3.4, baseFrequency: 0.02 };
@@ -129,7 +129,7 @@
         </div>
         <div class="kind">
           <img class="kind-art" src="/assets/products/value-rice.png" alt="" aria-hidden="true" />
-          <h3>It looks like the smart choice</h3>
+          <h3>It looks like the "smart" choice</h3>
           <p>The trick dresses up what's good for the store as what's good for you. "Best value" stickers, member rates, a minimum order just out of reach.</p>
         </div>
       </div>
@@ -226,7 +226,7 @@
       <div class="totals">
         <div class="total"><div class="lbl">it hid things</div><div class="val">−{lost.D}</div></div>
         <div class="total"><div class="lbl">it pressured you</div><div class="val">−{lost.P}</div></div>
-        <div class="total"><div class="lbl">"the smart choice"</div><div class="val">−{lost.O}</div></div>
+        <div class="total"><div class="lbl">the "smart" choice</div><div class="val">−{lost.O}</div></div>
       </div>
       <p class="sum">
         <span>100</span>
