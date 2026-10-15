@@ -45,7 +45,7 @@
         {/if}
         {#if timeDelta !== 0}
           <span class="chip time">
-            <img class="chip-icon" src="/assets/ui/timer.png" alt="" />
+            <img class="chip-icon" src="/assets/ui/hourglass.svg" alt="" />
             {fmtTime(timeDelta)}
           </span>
         {/if}

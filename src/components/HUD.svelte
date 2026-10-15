@@ -82,11 +82,11 @@
     </Tooltip>
 
     <Tooltip label="Her medication window." placement="bottom">
-      <div class="pill" class:warn={state.timeSeconds < 180}
+      <div class="pill wide" class:warn={state.timeSeconds < 180}
            use:wavyBorder={{ radius: 26, fill: '#FFFFFF', stroke: '#151515', strokeWidth: 2.2, waviness: 3.2, baseFrequency: 0.022 }}>
         <span class="content">
-          <img src="/assets/ui/timer.png" alt="" class="icon" />
-          <span class="value" bind:this={timeEl}>{formatTime(state.timeSeconds)}</span>
+          <img src="/assets/ui/hourglass.svg" alt="" class="icon" />
+          <span class="value" bind:this={timeEl}>{formatTime(state.timeSeconds)} m</span>
           {#if timeDelta}
             {#key timeDelta.key}
               <span class="delta" class:up={timeDelta.up}>{timeDelta.text}</span>
@@ -159,6 +159,8 @@
     justify-content: center;
     gap: 0.5rem;
   }
+  /* Wide enough for "15:00 m". */
+  .pill.wide { width: 186px; }
   .icon {
     width: 27px;
     height: 27px;

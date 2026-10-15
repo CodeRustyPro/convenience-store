@@ -46,20 +46,26 @@
   const CHOICES = [
     {
       label: 'Take the artisan loaf.',
+      art: { src: '/assets/products/sourdough.png', h: 150 },
       keeps: [],
       text: 'Every part of the trick worked. You didn\'t look past the sourdough, so you lose all 10.',
     },
     {
       label: 'Ask staff for cheaper bread.',
+      art: { src: '/assets/chars/bread-clerk.png', h: 230, bust: true },
       keeps: [0],
       text: 'You knew a cheaper loaf was there, so the store couldn\'t fool you about that: you keep those 2. But you still walked out with the ₹95 loaf, so everything else worked.',
     },
     {
       label: 'Crouch for the ₹40 bread.',
+      art: { src: '/assets/products/regular-bread.png', h: 190 },
       keeps: [0, 1, 2, 3, 4, 5],
       text: 'None of it worked. It cost you a minute, but that comes off the clock, not your dignity.',
     },
   ].map((c) => ({ ...c, loss: BREAD.reduce((s, p, i) => s + (c.keeps.includes(i) ? 0 : p.pts), 0) }));
+
+  // The corner figure, as it slumps from 100% down to 10%.
+  const POSES = [100, 75, 50, 25, 10];
 
   const KIND_LABEL = { hides: 'hides', pressures: 'pressures', smart: 'smart choice' };
 
@@ -80,16 +86,25 @@
         You walked in with <b>100%</b> dignity. Every aisle had a trick waiting for you.
         Each time a trick worked, you lost a little.
       </p>
+      <div class="poses" aria-hidden="true">
+        {#each POSES as p}
+          <figure><img src="/assets/ui/dignity-{p}.png" alt="" /><figcaption>{p}%</figcaption></figure>
+        {/each}
+      </div>
       <p class="scroll-hint" aria-hidden="true">scroll ↓</p>
     </header>
 
     <section>
       <h2><span class="num">1</span> What does dignity mean here?</h2>
-      <p>
-        As a customer, dignity is being treated as a person who makes their own decisions,
-        not as a wallet to be steered. A good shop helps you get what you came for. A shop
-        built on dark patterns quietly works against you while looking helpful.
-      </p>
+      <div class="with-art">
+        <p>
+          As a customer, dignity is being treated as a person who makes their own decisions,
+          not as a wallet to be steered. A good shop helps you get what you came for. A shop
+          built on dark patterns quietly works against you while looking helpful, like a
+          friendly greeter at the door of a store that's set up to make you spend.
+        </p>
+        <img class="figure bust" src="/assets/chars/greeter-1.png" alt="" aria-hidden="true" />
+      </div>
       <p>Our research breaks a customer's dignity into these parts:</p>
       <ul class="parts-of-dignity">
         {#each PARTS as [name, hint]}
@@ -103,14 +118,17 @@
       <h2><span class="num">2</span> The store has three kinds of tricks</h2>
       <div class="kinds">
         <div class="kind">
+          <img class="kind-art" src="/assets/products/flu-bundle.png" alt="" aria-hidden="true" />
           <h3>It hides things</h3>
           <p>The trick works because you can't see it. A cheap option tucked away, items slipped into your basket, fees that only show up at the till.</p>
         </div>
         <div class="kind">
+          <img class="kind-art bust" src="/assets/chars/nagger-1.png" alt="" aria-hidden="true" />
           <h3>It pressures you</h3>
           <p>The trick works by rushing or guilting you. Asking again and again, "only a few left", "your mum's unwell, isn't she?"</p>
         </div>
         <div class="kind">
+          <img class="kind-art" src="/assets/products/value-rice.png" alt="" aria-hidden="true" />
           <h3>It looks like the smart choice</h3>
           <p>The trick dresses up what's good for the store as what's good for you. "Best value" stickers, member rates, a minimum order just out of reach.</p>
         </div>
@@ -155,21 +173,24 @@
       <div class="choices">
         {#each CHOICES as c}
           <div class="choice-block">
+            <div class="vignette" aria-hidden="true">
+              <img src={c.art.src} alt="" class:bust={c.art.bust} style="height:{c.art.h}px" />
+            </div>
             <div class="choice-main">
               <div class="choice-head">
                 <div class="choice" use:wavyBorder={pill}><span class="label">{c.label}</span></div>
                 <span class="delta" class:kept={c.loss === 0}>−{c.loss}</span>
               </div>
               <p class="why">{c.text}</p>
+              <ul class="ticks">
+                {#each BREAD as part, i}
+                  <li class:kept={c.keeps.includes(i)}>
+                    <span class="mark">{c.keeps.includes(i) ? 'kept' : `−${part.pts}`}</span>
+                    <span>{part.what.split(':')[0].split(',')[0]}</span>
+                  </li>
+                {/each}
+              </ul>
             </div>
-            <ul class="ticks">
-              {#each BREAD as part, i}
-                <li class:kept={c.keeps.includes(i)}>
-                  <span class="mark">{c.keeps.includes(i) ? 'kept' : `−${part.pts}`}</span>
-                  <span>{part.what.split(':')[0].split(',')[0]}</span>
-                </li>
-              {/each}
-            </ul>
           </div>
         {/each}
       </div>
@@ -182,16 +203,21 @@
 
     <section>
       <h2><span class="num">4</span> Speaking up rarely saves you</h2>
-      <p>
-        In real life, questioning a price at the till almost never changes it. So in this
-        game, asking questions only saves the parts you protected by noticing: you kept your
-        wits, but the store still got its way.
-      </p>
-      <p>
-        Some tricks can't be escaped at all. The minimum order, the checkout fees and the
-        "you" price on eggs cost you something whatever you do. Even if you resisted every
-        single trick, the best you could leave with is <b>81%</b>.
-      </p>
+      <div class="with-art">
+        <div class="stack">
+          <p>
+            In real life, questioning a price at the till almost never changes it. So in this
+            game, asking questions only saves the parts you protected by noticing: you kept your
+            wits, but the store still got its way.
+          </p>
+          <p>
+            Some tricks can't be escaped at all. The minimum order, the checkout fees and the
+            "you" price on eggs cost you something whatever you do. Even if you resisted every
+            single trick, the best you could leave with is <b>81%</b>.
+          </p>
+        </div>
+        <img class="figure bust" src="/assets/chars/cashier-2.png" alt="" aria-hidden="true" />
+      </div>
     </section>
 
     <section>
@@ -261,6 +287,10 @@
   .kicker { margin: 0; font-size: 0.85rem; letter-spacing: 0.2em; color: var(--grey-mid); text-transform: uppercase; }
   h1 { margin: 0; font-weight: 400; font-size: 3rem; line-height: 1.05; text-wrap: balance; }
   .lede { margin: 0 auto; font-size: 1.3rem; line-height: 1.5; max-width: 40ch; }
+  .poses { display: flex; justify-content: center; align-items: flex-end; gap: 1.8rem; margin-top: 1.2rem; }
+  .poses figure { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 0.3rem; }
+  .poses img { height: 110px; width: auto; }
+  .poses figcaption { font-size: 0.9rem; color: var(--grey-mid); font-variant-numeric: tabular-nums; }
   .scroll-hint { margin: 1.5rem 0 0; color: var(--grey-low); font-size: 1rem; animation: nudge 2s ease-in-out infinite; }
   @keyframes nudge { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
   @media (prefers-reduced-motion: reduce) { .scroll-hint { animation: none; } }
@@ -278,6 +308,13 @@
   p { margin: 0; font-size: 1.12rem; line-height: 1.55; max-width: 68ch; }
   b { font-weight: 700; }
 
+  /* Text with a character drawing beside it. */
+  .with-art { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2rem; align-items: end; }
+  .stack { display: flex; flex-direction: column; gap: 1rem; }
+  .figure { height: 230px; width: auto; }
+  /* Characters are full-length drawings; show head and shoulders. */
+  .figure.bust { width: 150px; object-fit: cover; object-position: top center; }
+
   .parts-of-dignity {
     list-style: none; margin: 0.3rem 0; padding: 0;
     display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem 1.6rem;
@@ -287,15 +324,17 @@
   .phint { font-size: 0.92rem; line-height: 1.35; color: var(--grey-mid); }
 
   .kinds { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.4rem; margin: 0.3rem 0; }
-  .kind { padding-left: 1rem; border-left: 3px solid var(--ink); }
+  .kind { padding-left: 1rem; border-left: 3px solid var(--ink); display: flex; flex-direction: column; }
+  .kind-art { height: 130px; width: auto; max-width: 100%; object-fit: contain; align-self: center; margin-bottom: 0.8rem; }
+  .kind-art.bust { width: 110px; object-fit: cover; object-position: top center; }
   .kind h3 { margin: 0 0 0.3rem; font-weight: 400; font-size: 1.2rem; line-height: 1.2; }
   .kind p { font-size: 1rem; color: var(--ink-soft); }
 
   .scene { padding: 1.3rem 1.6rem; display: flex; gap: 1.4rem; align-items: center; margin: 0.4rem 0; }
   .scene p { position: relative; z-index: 2; max-width: none; }
   .loaves { position: relative; z-index: 2; flex: none; display: flex; align-items: flex-end; gap: 0.3rem; }
-  .loaves img { height: 96px; width: auto; }
-  .loaves img.small { height: 72px; }
+  .loaves img { height: 120px; width: auto; }
+  .loaves img.small { height: 92px; }
 
   .pts-tag {
     flex: none; min-width: 2.2rem; text-align: center;
@@ -312,16 +351,28 @@
 
   .choices { display: flex; flex-direction: column; gap: 1.6rem; margin: 0.4rem 0; }
   .choice-block {
-    display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 2rem;
+    display: grid; grid-template-columns: 210px minmax(0, 1fr); gap: 2rem; align-items: center;
     padding-top: 1.4rem; border-top: 1.5px dotted var(--grey-low);
   }
+  /* What each choice looks like, drawn from the game's own art. */
+  .vignette {
+    display: flex; align-items: flex-end; justify-content: center;
+    height: 230px;
+  }
+  .vignette img { width: auto; max-width: 100%; object-fit: contain; filter: drop-shadow(0 3px 3px rgba(0, 0, 0, 0.15)); }
+  /* The clerk is a full-length figure; show head and shoulders. */
+  .vignette img.bust { width: 150px; object-fit: cover; object-position: top center; }
   .choice-main { display: flex; flex-direction: column; gap: 0.8rem; min-width: 0; }
   .choice-head { display: flex; align-items: center; gap: 1rem; }
-  .choice { flex: 1; min-width: 0; padding: 0.6rem 1.2rem; text-align: center; font-size: 1.05rem; filter: drop-shadow(-1px 3px 3px rgba(0, 0, 0, 0.14)); }
+  .choice { flex: 0 1 auto; min-width: 0; padding: 0.6rem 1.2rem; text-align: center; font-size: 1.05rem; filter: drop-shadow(-1px 3px 3px rgba(0, 0, 0, 0.14)); }
   .delta { flex: none; font-size: 1.9rem; color: var(--accent-red); font-variant-numeric: tabular-nums; }
   .delta.kept { color: var(--accent-green); }
   .why { font-size: 1.05rem; line-height: 1.5; color: var(--ink-soft); }
-  .ticks { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.3rem; font-size: 0.98rem; color: var(--ink-soft); }
+  .ticks {
+    list-style: none; margin: 0.2rem 0 0; padding: 0;
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.3rem 1.6rem;
+    font-size: 0.98rem; color: var(--ink-soft);
+  }
   .ticks li { display: flex; gap: 0.5rem; align-items: baseline; }
   .ticks .mark { flex: none; min-width: 2.4rem; color: var(--accent-red); font-variant-numeric: tabular-nums; }
   .ticks li.kept { color: var(--grey-low); }
