@@ -19,7 +19,7 @@
     </div>
 
     <div class="stats" in:fly={{ y: 12, duration: 600, delay: 900 }}>
-      <div class="stat"><div class="lbl">final dignity</div><div class="val">{g.standing}%</div></div>
+      <div class="stat"><div class="lbl">dignity left</div><div class="val">{g.standing}%</div></div>
       <div class="stat"><div class="lbl">coins left</div><div class="val">₹{g.coins}</div></div>
       <div class="stat"><div class="lbl">time left</div><div class="val">{formatTime(g.timeSeconds)}</div></div>
     </div>
@@ -39,7 +39,7 @@
   </div>
 
   {#if explaining}
-    <DignityExplainer score={g.standing} onClose={() => (explaining = false)} />
+    <DignityExplainer score={g.standing} flags={g.flags} onClose={() => (explaining = false)} />
   {/if}
 </div>
 
