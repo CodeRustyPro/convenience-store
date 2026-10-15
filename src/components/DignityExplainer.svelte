@@ -296,7 +296,8 @@
   @media (prefers-reduced-motion: reduce) { .scroll-hint { animation: none; } }
 
   section { display: flex; flex-direction: column; gap: 1rem; }
-  h2 { margin: 0 0 0.2rem; font-weight: 400; font-size: 1.7rem; line-height: 1.2; display: flex; align-items: baseline; gap: 0.6rem; }
+  /* Same breathing room under every section heading. */
+  h2 { margin: 0 0 0.6rem; font-weight: 400; font-size: 1.7rem; line-height: 1.2; display: flex; align-items: baseline; gap: 0.6rem; }
   .num {
     flex: none;
     width: 1.7rem; height: 1.7rem;
@@ -309,7 +310,7 @@
   b { font-weight: 700; }
 
   /* Text with a character drawing beside it. */
-  .with-art { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2rem; align-items: end; }
+  .with-art { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2rem; align-items: start; }
   .stack { display: flex; flex-direction: column; gap: 1rem; }
   .figure { height: 230px; width: auto; }
   /* Characters are full-length drawings; show head and shoulders. */
