@@ -70,4 +70,8 @@
     0%, 100% { transform: rotate(-0.35deg) translateY(0); }
     50%      { transform: rotate(0.35deg)  translateY(-2px); }
   }
+
+  @media (hover: none) and (pointer: coarse) and (orientation: portrait) {
+    .character-slot { left: 3%; height: calc(var(--h) * 0.92); }
+  }
 </style>

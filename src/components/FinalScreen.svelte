@@ -115,4 +115,21 @@
     max-width: 640px;
     text-align: center;
   }
+
+  /* Portrait phones: one scrolling column, buttons stacked full width. */
+  @media (hover: none) and (pointer: coarse) and (orientation: portrait) {
+    .content {
+      justify-content: safe center;
+      overflow-y: auto;
+      gap: 1.5rem;
+      padding: calc(env(safe-area-inset-top, 0px) + 1.5rem) 1.25rem calc(env(safe-area-inset-bottom, 0px) + 1.5rem);
+    }
+    .footnote { font-size: 1.02rem; line-height: 1.5; }
+    .stats { gap: 1.1rem; }
+    .stat .lbl { font-size: 0.72rem; letter-spacing: 0.1em; }
+    .stat .val { font-size: 1.75rem; }
+    .actions { flex-direction: column; width: 100%; gap: 0.9rem; }
+    .play { width: 100%; font-size: 1.1rem; padding: 0.85rem 1.2rem; }
+    .play:hover { transform: none; }
+  }
 </style>

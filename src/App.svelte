@@ -79,12 +79,12 @@
   <div class="paper-grain"></div>
 </div>
 
-<!-- Phone-portrait only: this game is composed for landscape. -->
+<!-- Phones held sideways only: on phones the story is played upright. -->
 <div class="rotate-hint" aria-hidden="true">
   <div class="rotate-card">
     <div class="rotate-icon">⟳</div>
-    <div class="rotate-title">Please rotate your phone</div>
-    <div class="rotate-sub">This story is best played in landscape.</div>
+    <div class="rotate-title">Please turn your phone upright</div>
+    <div class="rotate-sub">This story is played in portrait.</div>
   </div>
 </div>
 
@@ -107,12 +107,15 @@
     z-index: 50;
   }
 
-  /* Rotate hint is hidden everywhere except portrait touch phones. */
+  /* Rotate hint is hidden everywhere except phones held sideways. */
   .rotate-hint { display: none; }
 
-  /* ---- Touch phones only (desktop path above is left untouched) ---- */
-  @media (hover: none) and (pointer: coarse) {
-    /* Fixed 1280x800 design box, uniformly scaled to fit the viewport. */
+  /* ---- Touch devices (desktop above is left untouched) ----
+     Phones are played upright: the stage fills the screen and each
+     component lays itself out for portrait under the same media query
+     (hover: none) and (pointer: coarse) and (orientation: portrait).
+     Tablets held sideways keep the scaled 1280x800 desktop stage. */
+  @media (hover: none) and (pointer: coarse) and (orientation: landscape) {
     .stage {
       width: 1280px;
       height: 800px;
@@ -122,8 +125,15 @@
     }
   }
   @media (hover: none) and (pointer: coarse) and (orientation: portrait) {
-    /* Portrait is too narrow for a 16:10 stage — hide it, ask to rotate. */
-    .stage { display: none; }
+    .stage {
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+    }
+  }
+  /* A phone on its side (short landscape screen): ask to turn it upright. */
+  @media (hover: none) and (pointer: coarse) and (orientation: landscape) and (max-height: 600px) {
+    .stage, .landing { display: none; }
     .rotate-hint {
       position: fixed;
       inset: 0;
@@ -138,7 +148,7 @@
       text-align: center;
       color: var(--ink);
       font-family: 'Love Ya Like A Sister', cursive;
-      max-width: 18rem;
+      max-width: 22rem;
     }
     .rotate-icon {
       font-size: 3.4rem;
@@ -151,6 +161,6 @@
   }
   @keyframes rotate-nudge {
     0%, 100% { transform: rotate(0deg); }
-    50%      { transform: rotate(90deg); }
+    50%      { transform: rotate(-90deg); }
   }
 </style>

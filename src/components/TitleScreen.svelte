@@ -47,19 +47,70 @@
     colourOf[i] = colourOf[i] < 0 ? i % HOVER.length : (colourOf[i] + 1) % HOVER.length;
   }
 
-  // Scale to the window height, but shrink further if the window is too
-  // narrow for both columns plus the title (1600 frame px).
+  // Portrait phones get their own arrangement: the same drawings in a band
+  // above the title and a band below it, on a 1080-px-wide frame. Positions
+  // are [x, y, band] in that frame; each band is pinned to its screen edge.
+  const PORTRAIT_MQ = '(hover: none) and (pointer: coarse) and (orientation: portrait)';
+  const P_W = 1080;
+  const P_H = 1900;   // top band + title + bottom band, with a little air
+  const PORTRAIT = {
+    sourdough:     [10,   0,   'top'],
+    amul:          [300, -20,  'top'],
+    cookies:       [500,  20,  'top'],
+    safal:         [866,   0,  'top'],
+    chips:         [40,  230,  'top'],
+    'ok-can':      [255, 270,  'top'],
+    'wheat-flour': [405, 205,  'top'],
+    'caffe-latte': [625, 180,  'top'],
+    apples:        [800, 205,  'top'],
+    'cup-noodles': [110, 455,  'top'],
+    vaporub:       [330, 480,  'top'],
+    eggs:          [480, 445,  'top'],
+    'wafer-stix':  [760, 430,  'top'],
+    maggi:         [40,   30,  'bottom'],
+    'ice-cream':   [275,  10,  'bottom'],
+    'choco-latte': [470,   0,  'bottom'],
+    pretzels:      [720,  15,  'bottom'],
+    basmati:       [0,   265,  'bottom'],
+    'taste-bag':   [180, 330,  'bottom'],
+    bread:         [545, 315,  'bottom'],
+    'rice-bag':    [790, 215,  'bottom'],
+  };
+  const placed = (band) => ITEMS.map((it, i) => ({ ...it, i }))
+    .filter((it) => PORTRAIT[it.name][2] === band)
+    .map((it) => ({ ...it, x: PORTRAIT[it.name][0], y: PORTRAIT[it.name][1] }));
+  const topBand = placed('top');
+  const bottomBand = placed('bottom');
+
+  // Landscape: scale to the window height, but shrink further if the window
+  // is too narrow for both columns plus the title (1600 frame px).
+  // Portrait: scale the 1080 frame to the window width.
   const MIN_W = 1600;
+  let portrait = $state(false);
   let scale = $state(1);
   let offY = $state(0);
+  let offX = $state(0);
   $effect(() => {
+    const mq = window.matchMedia(PORTRAIT_MQ);
     const fit = () => {
-      scale = Math.min(window.innerHeight / FRAME_H, window.innerWidth / MIN_W);
-      offY = (window.innerHeight - FRAME_H * scale) / 2;
+      portrait = mq.matches;
+      if (portrait) {
+        // Fit the width, unless the screen is too short for bands + title.
+        scale = Math.min(window.innerWidth / P_W, window.innerHeight / P_H);
+        offX = (window.innerWidth - P_W * scale) / 2;
+        offY = 0;
+      } else {
+        scale = Math.min(window.innerHeight / FRAME_H, window.innerWidth / MIN_W);
+        offY = (window.innerHeight - FRAME_H * scale) / 2;
+      }
     };
     fit();
     window.addEventListener('resize', fit);
-    return () => window.removeEventListener('resize', fit);
+    mq.addEventListener('change', fit);
+    return () => {
+      window.removeEventListener('resize', fit);
+      mq.removeEventListener('change', fit);
+    };
   });
 
   // Slow drift: each item floats, sways and tilts on its own cycle so the
@@ -91,9 +142,14 @@
   {/each}
 {/snippet}
 
-<div class="title-screen" style="--scale:{scale}; --off-y:{offY}px">
-  <div class="side left" aria-hidden="true">{@render art(left, 0)}</div>
-  <div class="side right" aria-hidden="true">{@render art(right, FRAME_W / 2)}</div>
+<div class="title-screen" class:portrait style="--scale:{scale}; --off-y:{offY}px; --off-x:{offX}px">
+  {#if portrait}
+    <div class="band top" aria-hidden="true">{@render art(topBand, 0)}</div>
+    <div class="band bottom" aria-hidden="true">{@render art(bottomBand, 0)}</div>
+  {:else}
+    <div class="side left" aria-hidden="true">{@render art(left, 0)}</div>
+    <div class="side right" aria-hidden="true">{@render art(right, FRAME_W / 2)}</div>
+  {/if}
 
   <div class="center">
     <h1 class="hero">
@@ -234,5 +290,45 @@
     z-index: 2;
     opacity: 0;
     animation: fadeIn 0.7s ease 1.2s forwards;
+  }
+
+  /* ---- Portrait phones ----
+     Bands of drawings pinned to the top and bottom edges, title centred
+     between them; all in 1080-px frame units scaled to the screen width. */
+  .band {
+    position: absolute;
+    left: var(--off-x, 0);
+    width: 1080px;
+    transform: scale(var(--scale, 1));
+  }
+  .band.top { top: 0; height: 620px; transform-origin: 0 0; }
+  .band.bottom { bottom: 0; height: 640px; transform-origin: 0 100%; }
+  .portrait .center {
+    top: 50%;
+    left: 50%;
+    width: 1080px;
+    height: auto;
+    transform: translate(-50%, -50%) scale(var(--scale, 1));
+    transform-origin: 50% 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .portrait .hero { position: static; width: auto; }
+  .portrait .play {
+    position: static;
+    transform: none;
+    margin-top: 70px;
+    padding: 26px 96px;
+    font-size: 56px;
+  }
+  .portrait .play:hover, .portrait .play:active { transform: none; }
+  .portrait .credit {
+    position: static;
+    transform: none;
+    width: auto;
+    margin-top: 64px;
+    font-size: 40px;
+    letter-spacing: -0.5px;
   }
 </style>

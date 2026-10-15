@@ -141,4 +141,9 @@
     -webkit-mask-size: auto 80%;
     mask-size: auto 80%;
   }
+
+  @media (hover: none) and (pointer: coarse) and (orientation: portrait) {
+    .badge { width: 60px; height: 60px; }
+    .pct { font-size: 0.62rem; top: 12%; }
+  }
 </style>

@@ -196,4 +196,28 @@
     78%  { opacity: 1; transform: translate(0, -70%); }
     100% { opacity: 0; transform: translate(0, -95%); }
   }
+
+  /* Portrait phones: one compact row along the top. */
+  @media (hover: none) and (pointer: coarse) and (orientation: portrait) {
+    .hud {
+      bottom: auto;
+      height: var(--hud-h);
+      padding: calc(env(safe-area-inset-top, 0px) + 10px) 12px 0;
+      align-items: flex-start;
+    }
+    .game-title { display: none; }
+    .hud-left { flex-direction: row; gap: 8px; }
+    .pill, .pill.wide { width: auto; height: 46px; padding: 0 16px; font-size: 1rem; }
+    .content { gap: 0.4rem; }
+    .icon { width: 20px; height: 20px; }
+    .value { min-width: 0; }
+    /* Change badges drop below the pill instead of beside it. */
+    .delta { left: 50%; top: calc(100% + 4px); font-size: 1rem; animation-name: deltaDrop; }
+    @keyframes deltaDrop {
+      0%   { opacity: 0; transform: translate(-50%, -4px) scale(0.9); }
+      18%  { opacity: 1; transform: translate(-50%, 0) scale(1.06); }
+      78%  { opacity: 1; transform: translate(-50%, 4px); }
+      100% { opacity: 0; transform: translate(-50%, 12px); }
+    }
+  }
 </style>
