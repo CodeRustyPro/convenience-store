@@ -144,7 +144,7 @@
 
   @media (hover: none) and (pointer: coarse) and (orientation: portrait) {
     /* Bigger circle; the % sits lower, clear of the curved border. */
-    .badge { width: 80px; height: 80px; }
+    .badge { width: 74px; height: 74px; }
     .pct { font-size: 0.68rem; top: 24%; }
     /* The figure art has empty space above the head and below the feet, so
        draw it bigger and lift it: the head then sits just under the %. */

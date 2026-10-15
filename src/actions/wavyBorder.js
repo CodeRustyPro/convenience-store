@@ -8,6 +8,13 @@
 
 const NS = 'http://www.w3.org/2000/svg';
 
+// Portrait phones draw every outline thinner: at phone size the desktop
+// line weights look heavy next to the smaller text.
+const PHONE_MQ = '(hover: none) and (pointer: coarse) and (orientation: portrait)';
+const PHONE_STROKE = 0.7;
+const strokeScale = () =>
+  (typeof window !== 'undefined' && window.matchMedia(PHONE_MQ).matches ? PHONE_STROKE : 1);
+
 export function wavyBorder(node, options = {}) {
   let opts = normalize(options);
 
@@ -57,8 +64,9 @@ export function wavyBorder(node, options = {}) {
 
       if (rectEl) rectEl.remove();
 
+      const strokeWidth = opts.strokeWidth * strokeScale();
       // Inset enough to give the displacement room to wobble outward
-      const inset = opts.strokeWidth / 2 + opts.waviness + 1;
+      const inset = strokeWidth / 2 + opts.waviness + 1;
       rectEl = document.createElementNS(NS, 'rect');
       rectEl.setAttribute('x', inset);
       rectEl.setAttribute('y', inset);
@@ -70,7 +78,7 @@ export function wavyBorder(node, options = {}) {
       rectEl.setAttribute('ry', r);
       rectEl.setAttribute('fill', opts.fill);
       rectEl.setAttribute('stroke', opts.stroke);
-      rectEl.setAttribute('stroke-width', opts.strokeWidth);
+      rectEl.setAttribute('stroke-width', strokeWidth);
       rectEl.setAttribute('filter', `url(#${filterId})`);
       svg.appendChild(rectEl);
     });

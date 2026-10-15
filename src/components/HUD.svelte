@@ -14,7 +14,7 @@
   let pillRadius = $state(26);
   $effect(() => {
     const mq = window.matchMedia(PORTRAIT_MQ);
-    const set = () => { pillRadius = mq.matches ? 20 : 26; };
+    const set = () => { pillRadius = mq.matches ? 18 : 26; };
     set();
     mq.addEventListener('change', set);
     return () => mq.removeEventListener('change', set);
@@ -220,10 +220,10 @@
     .game-title { display: none; }
     .hud-left { flex-direction: column; gap: 6px; }
     /* Same proportions as the desktop pills (168x57 and 186x57), smaller. */
-    .pill { width: 130px; height: 44px; padding: 0 12px; font-size: 0.95rem; }
-    .pill.wide { width: 144px; }
+    .pill { width: 118px; height: 40px; padding: 0 10px; font-size: 0.95rem; }
+    .pill.wide { width: 131px; }
     .content { gap: 0.4rem; }
-    .icon { width: 19px; height: 19px; }
+    .icon { width: 17px; height: 17px; }
     .value { min-width: 0; }
     /* Change badges: a little more room from the pill. */
     .delta { font-size: 1rem; left: calc(100% + 0.9rem); }

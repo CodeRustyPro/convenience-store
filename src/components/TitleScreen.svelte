@@ -282,14 +282,14 @@
   .portrait .hero {
     position: static;
     width: auto;
-    font-size: min(13vw, 72px);
+    font-size: min(12vw, 64px);
   }
   .portrait .play {
     position: static;
     transform: none;
     margin-top: 28px;
-    padding: 12px 38px;
-    font-size: 20px;
+    padding: 10px 32px;
+    font-size: 17px;
   }
   .portrait .play:hover, .portrait .play:active { transform: none; }
   .portrait .bottom-credit {
@@ -299,7 +299,7 @@
     bottom: calc(env(safe-area-inset-bottom, 0px) + 22px);
     transform: none;
     width: auto;
-    font-size: 14px;
+    font-size: 12.5px;
     letter-spacing: -0.2px;
   }
 </style>
