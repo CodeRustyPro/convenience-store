@@ -284,14 +284,14 @@
   }
 
   header { text-align: center; min-height: 70vh; display: flex; flex-direction: column; justify-content: center; gap: 1rem; }
-  .kicker { margin: 0; font-size: 0.85rem; letter-spacing: 0.2em; color: var(--grey-mid); text-transform: uppercase; }
+  .kicker { margin: 0 auto; font-size: 0.85rem; letter-spacing: 0.2em; color: var(--grey-mid); text-transform: uppercase; }
   h1 { margin: 0; font-weight: 400; font-size: 3rem; line-height: 1.05; text-wrap: balance; }
   .lede { margin: 0 auto; font-size: 1.3rem; line-height: 1.5; max-width: 40ch; }
   .poses { display: flex; justify-content: center; align-items: flex-end; gap: 1.8rem; margin-top: 1.2rem; }
   .poses figure { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 0.3rem; }
   .poses img { height: 110px; width: auto; }
   .poses figcaption { font-size: 0.9rem; color: var(--grey-mid); font-variant-numeric: tabular-nums; }
-  .scroll-hint { margin: 1.5rem 0 0; color: var(--grey-low); font-size: 1rem; animation: nudge 2s ease-in-out infinite; }
+  .scroll-hint { margin: 1.5rem auto 0; color: var(--grey-low); font-size: 1rem; animation: nudge 2s ease-in-out infinite; }
   @keyframes nudge { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
   @media (prefers-reduced-motion: reduce) { .scroll-hint { animation: none; } }
 

@@ -40,6 +40,7 @@ VAR addedFiller      = false
 VAR paidDripFees     = false
 VAR subtotal         = 0    // running value of GOODS in the basket (no fees)
 VAR nagsRefused      = 0    // membership "No"s — feeds the receipt's tally
+VAR spent            = 0    // total paid so far (500 − wallet), mirrored in by the engine
 
 -> intro
 
@@ -233,8 +234,10 @@ A junction in the store. The Express checkout sits empty — but you pay for the
 // "add a chocolate" to clear it.
 ~ temp minOrder = (subtotal / 50 + 1) * 50
 ~ temp gap = minOrder - subtotal
-A turnstile before the registers. Your basket reads ₹{subtotal}. # narration
-Tonight's minimum order for free checkout is ₹{minOrder} — you're just ₹{gap} short. Pop a chocolate in or it's a ₹35 convenience charge.
+// The groceries total leaves out the membership and the Express lane, so
+// name them when they push what you've spent above it.
+A turnstile before the registers. Your groceries come to ₹{subtotal}{joinedClub or tookExpress:, but with {joinedClub and tookExpress:the membership and the Express lane|{joinedClub:the membership|the Express lane}} you've already spent ₹{spent}}. # narration
+Tonight's minimum on groceries for free checkout is ₹{minOrder}. You're ₹{gap} short. Pop a chocolate in, or it's a ₹35 convenience charge.
 * [Pay the ₹35 fee. # fx: coins=-35, standing=-10 # flag: paidGateFee=true, dg_gate=D4P2O4]
     ~ paidGateFee = true
     -> register
