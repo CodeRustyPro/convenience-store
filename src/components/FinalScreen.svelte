@@ -17,6 +17,8 @@
 
 <div class="final" in:fade={{ duration: 600 }}>
   <div class="content">
+    <div class="top">
+    <div class="left">
     <div class="footnote" in:fade={{ duration: 800, delay: 300 }}>
       This store isn't real. But the choices you made are. You've probably made them dozens of times without noticing. That's because quick commerce platforms like Blinkit, Instamart, and Zepto rarely ask for everything at once. They spread these compromises across ordinary moments, until they stop feeling like compromises at all. Convenience never asks for everything at once. It asks for one reasonable compromise at a time, until you no longer notice what you're giving up.
     </div>
@@ -26,8 +28,10 @@
       <div class="stat"><div class="lbl">coins left</div><div class="val">₹{g.coins}</div></div>
       <div class="stat"><div class="lbl">time left</div><div class="val">{formatTime(g.timeSeconds)}</div></div>
     </div>
+    </div>
 
     <WhereYouStand score={g.standing} />
+    </div>
 
     <div class="actions" in:fly={{ y: 16, duration: 600, delay: 1300 }}>
       <button class="play"
@@ -76,6 +80,24 @@
     text-align: center;
     padding: 2rem;
   }
+  /* Desktop: reflection and stats on the left, "where you stand" on the
+     right, buttons along the bottom. */
+  .top {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3.5rem;
+    width: min(1120px, 100%);
+  }
+  .left {
+    flex: 0 1 560px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.8rem;
+    text-align: left;
+  }
+  .top :global(.stand) { flex: 0 1 460px; }
   .stats {
     display: flex;
     gap: 2.2rem;
@@ -126,7 +148,6 @@
     font-size: 1.2rem;
     line-height: 1.5;
     max-width: 640px;
-    text-align: center;
   }
 
   /* Portrait phones: one scrolling column, buttons stacked full width. */
@@ -137,6 +158,9 @@
       gap: 1.5rem;
       padding: calc(env(safe-area-inset-top, 0px) + 1.5rem) 1.25rem calc(env(safe-area-inset-bottom, 0px) + 1.5rem);
     }
+    .top { flex-direction: column; gap: 1.5rem; }
+    .left { flex: none; align-items: center; text-align: center; gap: 1.5rem; }
+    .top :global(.stand) { flex: none; }
     .footnote { font-size: 1.02rem; line-height: 1.5; }
     .stats { gap: 1.1rem; }
     .stat .lbl { font-size: 0.72rem; letter-spacing: 0.1em; }
