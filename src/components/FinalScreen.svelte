@@ -4,12 +4,14 @@
   import { wavyBorder } from '../actions/wavyBorder.js';
   import { fade, fly } from 'svelte/transition';
   import DignityExplainer from './DignityExplainer.svelte';
+  import MeetDesigners from './MeetDesigners.svelte';
 
   let { onRestart } = $props();
   let g = $state({ coins: 0, standing: 0, timeSeconds: 0 });
   game.subscribe((s) => { g = s; });
 
   let explaining = $state(false);
+  let meeting = $state(false);
 </script>
 
 <div class="final" in:fade={{ duration: 600 }}>
@@ -35,11 +37,19 @@
               onclick={() => (explaining = true)}>
         <span class="play-label">HOW WAS DIGNITY CALCULATED?</span>
       </button>
+      <button class="play secondary"
+              use:wavyBorder={{ radius: 'pill', fill: '#FFFFFF', stroke: '#151515', strokeWidth: 2.4, waviness: 3.6, baseFrequency: 0.020 }}
+              onclick={() => (meeting = true)}>
+        <span class="play-label">MEET THE DESIGNERS</span>
+      </button>
     </div>
   </div>
 
   {#if explaining}
     <DignityExplainer score={g.standing} flags={g.flags} onClose={() => (explaining = false)} />
+  {/if}
+  {#if meeting}
+    <MeetDesigners onClose={() => (meeting = false)} />
   {/if}
 </div>
 
@@ -84,8 +94,8 @@
   /* Same treatment as the title-screen PLAY button. */
   .play {
     position: relative;
-    padding: 0.95rem 2.8rem;
-    font-size: 1.6rem;
+    padding: 0.85rem 2.2rem;
+    font-size: 1.35rem;
     font-family: 'Love Ya Like A Sister', cursive;
     color: var(--ink);
     cursor: pointer;
