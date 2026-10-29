@@ -5,6 +5,7 @@
   import { fade, fly } from 'svelte/transition';
   import DignityExplainer from './DignityExplainer.svelte';
   import MeetDesigners from './MeetDesigners.svelte';
+  import WhereYouStand from './WhereYouStand.svelte';
 
   let { onRestart } = $props();
   let g = $state({ coins: 0, standing: 0, timeSeconds: 0 });
@@ -25,6 +26,8 @@
       <div class="stat"><div class="lbl">coins left</div><div class="val">₹{g.coins}</div></div>
       <div class="stat"><div class="lbl">time left</div><div class="val">{formatTime(g.timeSeconds)}</div></div>
     </div>
+
+    <WhereYouStand score={g.standing} />
 
     <div class="actions" in:fly={{ y: 16, duration: 600, delay: 1300 }}>
       <button class="play"

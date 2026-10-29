@@ -93,6 +93,20 @@ A few pivots worth building in Excel/Sheets:
 | Does the club nag work? | runs: `joined_club` rate, split by `nags_refused` |
 | Do repeat players get more resistant? | runs: `final_dignity` by `browser_id`, ordered by `ts` |
 
+## "Where you stand" on the end screen
+
+The end screen compares each player's dignity with everyone who has finished
+the game. It reads `GET <your /exec URL>?stats=dignity`, which returns score
+counts only, never individual rows. It counts finished runs only (`run_end`,
+`completed = 1`) from 12 Oct 2026 onwards, when the current dignity scoring
+went live. Results are cached for two minutes.
+
+After updating `Code.gs`, redeploy so the live URL picks it up:
+**Deploy → Manage deployments → edit (pencil) → Version: New version → Deploy**.
+The URL stays the same. Until then, or with fewer than three finished runs, the
+section stays hidden. Add `?standdemo=1` to the game URL to preview it with
+sample data.
+
 ## Caveats
 
 The site is static, so the endpoint URL and token ship inside the public JS

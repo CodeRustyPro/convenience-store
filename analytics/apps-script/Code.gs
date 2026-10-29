@@ -120,7 +120,52 @@ function doPost(e) {
  * Add ?token=YOUR_TOKEN to also get the exact spreadsheet it writes to and
  * the row count of every tab — the fastest way to find data that "vanished".
  */
+// "Where you stand" on the end screen compares a player's dignity with
+// everyone else's. Only finished runs since the current dignity scoring
+// went live count: older runs used a different scale.
+var STATS_SINCE = new Date('2026-10-12T00:00:00Z');
+var STATS_CACHE_SECONDS = 120;
+
+// GET ?stats=dignity -> { ok, total, counts: { "35": 4, ... } }
+// Aggregate counts only, so it needs no token and exposes no rows.
+function dignityStats() {
+  var cache = CacheService.getScriptCache();
+  var hit = cache.get('dignity-stats');
+  if (hit) return JSON.parse(hit);
+
+  var out = { ok: true, total: 0, counts: {} };
+  var sheet = book().getSheetByName('runs');
+  if (sheet && sheet.getLastRow() > 1) {
+    var values = sheet.getDataRange().getValues();
+    var head = values[0];
+    var col = function (name) { return head.indexOf(name); };
+    var cTs = col('ts'), cEvent = col('event'), cDone = col('completed'), cDig = col('final_dignity');
+    for (var r = 1; r < values.length; r++) {
+      var row = values[r];
+      if (cEvent >= 0 && row[cEvent] !== 'run_end') continue;
+      if (cDone >= 0 && Number(row[cDone]) !== 1) continue;
+      var ts = row[cTs] instanceof Date ? row[cTs] : new Date(String(row[cTs]));
+      if (!(ts >= STATS_SINCE)) continue;
+      var d = Number(row[cDig]);
+      if (row[cDig] === '' || isNaN(d)) continue;
+      d = Math.max(0, Math.min(100, Math.round(d)));
+      out.counts[d] = (out.counts[d] || 0) + 1;
+      out.total += 1;
+    }
+  }
+  cache.put('dignity-stats', JSON.stringify(out), STATS_CACHE_SECONDS);
+  return out;
+}
+
 function doGet(e) {
+  if (e && e.parameter && e.parameter.stats === 'dignity') {
+    try {
+      return json(dignityStats());
+    } catch (err) {
+      return json({ ok: false, error: String(err) });
+    }
+  }
+
   var out = { ok: true, service: 'convenience-store-analytics' };
   var token = e && e.parameter ? e.parameter.token : null;
 
