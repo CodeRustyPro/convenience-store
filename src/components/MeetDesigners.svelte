@@ -10,7 +10,7 @@
     {
       name: 'Parisa Mehta',
       // Circular crop: zoom in and centre on the face.
-      photo: { src: '/assets/designers/parisa.jpg', pos: '48% 32%', zoom: 1.55 },
+      photo: { src: '/assets/designers/parisa.jpg', pos: '48% 34%', zoom: 1.8 },
       bio: 'Parisa Mehta is a design researcher and student at BITS Design School, India. She works across people, systems and services, using research and strategy to craft unique, context-driven solutions that are actionable, equitable and, most importantly, spark joy. Her work spans urban spaces, digital services, community systems and consumer experiences.',
       email: 'parisa.mehta2024@bitsdesign.edu.in',
       linkedin: 'https://www.linkedin.com/in/parisa-mehta/',
