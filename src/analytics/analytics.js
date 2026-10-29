@@ -76,6 +76,25 @@ function browserId() {
   return id;
 }
 
+// Everyone's final dignity, for the end screen's "where you stand".
+// Resolves to { total, counts: { score: n } } or null if the sheet isn't
+// reachable (no endpoint, offline, script not redeployed yet).
+export async function fetchDignityStats({ timeoutMs = 6000 } = {}) {
+  if (!ENDPOINT) return null;
+  const ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+  const timer = ctrl ? setTimeout(() => ctrl.abort(), timeoutMs) : null;
+  try {
+    const res = await fetch(`${ENDPOINT}?stats=dignity`, { signal: ctrl?.signal });
+    const data = await res.json();
+    if (!data || !data.ok || typeof data.counts !== 'object') return null;
+    return { total: Number(data.total) || 0, counts: data.counts };
+  } catch {
+    return null;
+  } finally {
+    if (timer) clearTimeout(timer);
+  }
+}
+
 export function isEnabled() {
   if (ls((s) => s.getItem(OPTOUT_KEY), null) === '1') return false;
   return Boolean(ENDPOINT);
