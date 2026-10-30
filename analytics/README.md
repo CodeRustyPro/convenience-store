@@ -98,7 +98,7 @@ A few pivots worth building in Excel/Sheets:
 The end screen compares each player's dignity with everyone who has finished
 the game. It reads `GET <your /exec URL>?stats=dignity`, which returns score
 counts only, never individual rows. It counts finished runs only (`run_end`,
-`completed = 1`) from 12 Oct 2026 onwards, when the current dignity scoring
+`completed = 1`) from 13 Oct 2026 onwards, when the current dignity scoring
 went live. Results are cached for two minutes.
 
 After updating `Code.gs`, redeploy so the live URL picks it up:

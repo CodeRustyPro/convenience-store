@@ -123,7 +123,7 @@ function doPost(e) {
 // "Where you stand" on the end screen compares a player's dignity with
 // everyone else's. Only finished runs since the current dignity scoring
 // went live count: older runs used a different scale.
-var STATS_SINCE = new Date('2026-10-12T00:00:00Z');
+var STATS_SINCE = new Date('2026-10-13T00:00:00Z');
 var STATS_CACHE_SECONDS = 120;
 
 // GET ?stats=dignity -> { ok, total, counts: { "35": 4, ... } }
